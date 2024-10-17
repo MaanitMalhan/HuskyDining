@@ -3,15 +3,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 
-const Home = () => {
+const Menu = () => {
     return (
         <div>
             <Header />
-            <h1> Welcome to HuskyDining! </h1>
-            <img src="https://uconn.edu/content/uploads/2022/11/Avery_Point_Drone0_20210624_0256.png" alt="UConn Campus" />
+            <h1> Menu </h1>
             <Footer />
         </div>
     );
 }
 
-export default Home;
+export default Menu;
