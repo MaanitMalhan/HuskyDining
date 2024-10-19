@@ -23,23 +23,57 @@
   color: red; 
 }
 
+
 /* Header CSS */
 .header{
   background-color: rgb(22, 11, 142);
   color: white;
-  padding: 10px;
-  text-align: center;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header input[type="text"] {
+  padding: 5px;
+  margin-left: 15px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.header button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  background-color: white;
+  color: rgb(22, 11, 142);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.header button:hover {
+  background-color: #bcbcbc;
+  color: rgb(22, 11, 142);
 }
 
 .header a{
   color: white;
   text-decoration: none;
+  font-weight: bold;
 }
 
 /* Footer CSS */
+
+
 .footer{
   background-color: rgb(22, 11, 142);
   color: white;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  width: 100%
 }
