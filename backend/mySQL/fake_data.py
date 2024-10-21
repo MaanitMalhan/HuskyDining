@@ -24,6 +24,7 @@ with open('data/first_names.json') as first, open('data/last_names.json') as las
     query = "INSERT INTO students (name, points, flex_passes) VALUES (%s, %s, %s)"
     val = []
     
+    # Changes range to for the amount of random student names inserted into the database
     for i in range(2):
         first_name = data_first[randint(0, n_first - 1)]
         last_name = data_last[randint(0, n_last - 1)]
