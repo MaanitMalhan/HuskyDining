@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import huskyLogo from '../assets/husky.png'; // This points to the logo in the assets folder
 
 const Home = () => {
     return (
@@ -8,11 +9,12 @@ const Home = () => {
             <Header />
             <main>
                 <h1> Welcome to HuskyDining! </h1>
-                <img 
-                    src="https://uconn.edu/content/uploads/2022/11/Avery_Point_Drone0_20210624_0256.png" 
-                    alt="UConn Campus" 
-                    style={{ width: '100%', height: 'auto' }} 
-                />
+
+                {/* Logo Container for Proper Centering and Sizing */}
+                <div className="logo-container">
+                    <img src={huskyLogo} alt="HuskyDining Logo" className="logo-image" />
+                </div>
+
                 <section>
                     <h2>What is HuskyDining?</h2>
                     <p>
@@ -21,7 +23,7 @@ const Home = () => {
                         dining services, so you can make informed decisions about your meals.
                     </p>
                 </section>
-
+                
                 <section>
                     <h2>How It Works</h2>
                     <p>
