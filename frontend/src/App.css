@@ -119,3 +119,62 @@ img {
   object-fit: cover; /* Ensures the image covers the area without distortion */
   margin: 20px 0;    /* Adds margin above and below the image */
 }
+
+
+/* Donation Page Styling */
+.donation-page {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.donation-page h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.donation-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.donation-page label {
+  font-size: 16px;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.donation-page input, 
+.donation-page select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.donation-page button {
+  background-color: #000080;
+  color: white;
+  padding: 10px 0;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.donation-page button:hover {
+  background-color: #00509e;
+}
+
+.confirmation-message {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e6ffe6;
+  color: #007500;
+  border: 1px solid #007500;
+  border-radius: 5px;
+  font-size: 16px;
+}
