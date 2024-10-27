@@ -6,7 +6,6 @@ const Header = () => {
     <nav className="header" style={{ backgroundColor: '#000080', padding: '10px 0' }}>
       <h1 style={{ color: 'white', display: 'inline-block', marginLeft: '20px' }}>HuskyDining</h1>
       
-      
       {/* Navigation Links */}
       <div className="nav-links" style={{ display: 'inline-block', marginLeft: '40px' }}>
         <Link to="/">Home</Link>

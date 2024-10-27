@@ -129,15 +129,10 @@ img {
   text-align: center;
 }
 
-
 .donation-page h2 {
   margin-bottom: 20px;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
-  color: #333333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .donation-page form {
@@ -150,58 +145,36 @@ img {
   font-size: 16px;
   text-align: left;
   margin-bottom: 5px;
-  font-weight: bold;
-  color: #555555;
 }
 
 .donation-page input, 
 .donation-page select {
-  padding: 12px;
+  padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f9f9f9;
 }
 
-
-/* Donate Button */
 .donation-page button {
-  background: linear-gradient(135deg, #00509e, #000080);
+  background-color: #000080;
   color: white;
-  padding: 15px;
-  font-size: 20px;
+  padding: 10px 0;
+  font-size: 18px;
   border: none;
   cursor: pointer;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 20px;
+  border-radius: 5px;
 }
 
 .donation-page button:hover {
   background-color: #00509e;
 }
 
-.donation-page button:hover {
-  background: linear-gradient(135deg, #007bbd, #00509e);
-  transform: translateY(-2px);
-}
-
 .confirmation-message {
   margin-top: 20px;
   padding: 15px;
-  background-color: #e0ffe4;
-  color: #2b7a2b;
-  border: 1px solid #2b7a2b;
+  background-color: #e6ffe6;
+  color: #007500;
+  border: 1px solid #007500;
   border-radius: 5px;
   font-size: 16px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.confirmation-message::before {
-  content: "✔️"; /* Checkmark icon */
-  font-size: 1.2em;
 }

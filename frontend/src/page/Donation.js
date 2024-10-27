@@ -5,19 +5,14 @@ import Footer from '../components/footer';
 const Donation = () => {
     const [donationType, setDonationType] = useState('');
     const [amount, setAmount] = useState('');
-    const [recipient, setRecipient] = useState('');
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [confirmationMessage, setConfirmationMessage] = useState('');
-
 
     const handleDonationSubmit = (e) => {
         e.preventDefault();
-
-        setConfirmationMessage(`Thank you for donating ${amount} ${donationType} to ${recipient}!`); //Simple confirmation
+        alert("Thank you for your donation!"); //Simple confirmation
         setShowConfirmation(true);
         setDonationType('');  //Reset the form
         setAmount('');
-        setRecipient('');
     };
 
     return (
@@ -45,24 +40,16 @@ const Donation = () => {
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder="Enter Amount"
                     />
-                    <label htmlFor="recipient">Recipient:</label>
-                    <input
-                        type="text"
-                        id="recipient"
-                        value={recipient}
-                        onChange={(e) => setRecipient(e.target.value)}
-                        placeholder="Enter Recipient"
-                    />
+
                     <button type="submit">Donate Now</button>
                 </form>
 
                 {showConfirmation && (
                     <div 
                     className="confirmation-message">
-                        {confirmationMessage}
+                    Thank you for your donation!
                     </div>
                 )}
-
             </main>
             <Footer />
         </div>
