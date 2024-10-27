@@ -10,6 +10,7 @@ const Header = () => {
       <div className="nav-links" style={{ display: 'inline-block', marginLeft: '40px' }}>
         <Link to="/">Home</Link>
         <Link to="/menu">Menu</Link>
+        <Link to="/donation">Donate</Link>
       </div>
 
       {/* Search Input */}
