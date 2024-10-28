@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react';
 
 const Footer = () => {
-    return (
-        <footer className="footer">
-        &copy; HuskyDining. Senior Design Project.
-        </footer>
-    );
-    }
+  return (
+    <footer>
+      &copy; {new Date().getFullYear()} HuskyDining. Senior Design Project.
+    </footer>
+  );
+};
+
 export default Footer;
