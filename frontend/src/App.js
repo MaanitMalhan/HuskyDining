@@ -1,7 +1,9 @@
 import './App.css';
 import Home from './page/home';
 import Menu from './page/Menu';
+import Donation from './page/Donation';
 import Menusupport from './components/Menusupport';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './page/Login'; // Import Login component
 import SignUp from './page/SignUp'; // Import SignUp component
 import Dashboard from './page/Dashboard'; // Import Dashboard component
@@ -12,6 +14,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
+
       <AuthProvider> {/* Wrap the app in AuthProvider to manage auth state */}
         <Router>
           <Routes>
