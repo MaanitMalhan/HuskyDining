@@ -3,50 +3,38 @@
   text-align: center;
 }
 
-/* Container for the logo to control its size and centering */
+/* Logo Container for better alignment */
 .logo-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Full width container */
-  padding: 20px 0; /* Add some vertical padding to make the container visually bigger */
-  background-color: #DCD8D1; /* Add a background color to highlight the container */
+  width: 100%;
+  padding: 10px 0; /* Reduced padding for a more compact look */
+  background-color: #DCD8D1; /* Background color to highlight the logo area */
   margin-bottom: 20px;
 }
 
-
-
-/* Styling for the logo image itself */
+/* Styling for the logo image */
 .logo-image {
-  width: 80%; /* Adjust to make the logo fit the width of the container */
-  max-width: 1000px; /* Ensure it doesn't get too big on large screens */
+  width: 70%; /* Adjust width to control the logo size */
+  max-width: 800px; /* Increase max width to 800px */
   height: auto;
-  object-fit: contain; /* Ensures the logo fits inside the container without being distorted */
-}
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  object-fit: contain;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Welcome Text Styling */
+.welcome-text {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
 /* Header Styling */
 .header {
   background-color: #000080;  /* Navy Blue */
-  padding: 10px 0;
+  padding: 8px 20px; /* Reduced padding for compactness */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,7 +42,7 @@
 
 .header h1 {
   color: white;
-  margin-left: 20px;
+  margin: 0;
 }
 
 .nav-links a {
@@ -112,10 +100,9 @@ ul {
 }
 
 /* Image Styling */
-
 img {
-  width: 100%;      /* Makes the image span the width of its container */
-  max-height: 400px; /* Set a maximum height to avoid the image becoming too tall */
-  object-fit: cover; /* Ensures the image covers the area without distortion */
-  margin: 20px 0;    /* Adds margin above and below the image */
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  margin: 20px 0;
 }
