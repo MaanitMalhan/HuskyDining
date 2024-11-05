@@ -1,6 +1,7 @@
 import React from 'react';
-import Header from '../components/header';
-import Footer from '../components/footer';
+
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import huskyLogo from '../assets/husky.png'; // This points to the logo in the assets folder
 
 const Home = () => {

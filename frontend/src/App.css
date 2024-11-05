@@ -3,7 +3,7 @@
   text-align: center;
 }
 
-/* Container for the logo to control its size and centering */
+
 .logo-container {
   display: flex;
   justify-content: center;
@@ -26,12 +26,18 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  width: 100%;
+  padding: 10px 0; /* Reduced padding for a more compact look */
+  background-color: #DCD8D1; /* Background color to highlight the logo area */
+  margin-bottom: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Styling for the logo image */
+.logo-image {
+  width: 70%; /* Adjust width to control the logo size */
+  max-width: 800px; /* Increase max width to 800px */
+  height: auto;
+  object-fit: contain;
 }
 
 @keyframes App-logo-spin {
@@ -55,6 +61,49 @@
 .header h1 {
   color: white;
   margin-left: 20px;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.search-bar {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.search, .sign-in {
+  margin-right: 20px;
+}
+
+/* Welcome Text Styling */
+.welcome-text {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+/* Header Styling */
+.header {
+  background-color: #000080;  /* Navy Blue */
+  padding: 8px 20px; /* Reduced padding for compactness */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h1 {
+  color: white;
+  margin: 0;
 }
 
 .nav-links a {
@@ -177,4 +226,10 @@ img {
   border: 1px solid #007500;
   border-radius: 5px;
   font-size: 16px;
+}
+img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  margin: 20px 0;
 }
