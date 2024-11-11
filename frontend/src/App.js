@@ -10,7 +10,6 @@ import SignUp from './page/SignUp'; // Import SignUp component
 import Dashboard from './page/Dashboard'; // Import Dashboard component
 import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute for protecting routes
 import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
