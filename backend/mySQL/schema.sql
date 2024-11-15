@@ -3,11 +3,11 @@ USE dining_hall;
 
 CREATE TABLE students (
     peoplesoft INT NOT NULL AUTO_INCREMENT,
-    netid VARCHAR(255) NOT NULL,
-    password VARCHAR(255) DEFAULT 'password',
+    netid VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    points INT,
-    flex_passes INT,
+    points INT DEFAULT 0,
+    flex_passes INT DEFAULT 0,
     PRIMARY KEY (peoplesoft)
 );
 
