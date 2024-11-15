@@ -1,5 +1,5 @@
 CREATE DATABASE auth_db;
-USE dining_hall;
+USE auth_db;
 
 CREATE TABLE users (
     UserID INT PRIMARY KEY AUTO_INCREMENT,         -- Unique ID for each user
@@ -11,7 +11,3 @@ CREATE TABLE users (
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Timestamp of last update
 );
 
-
-
--- INSERT INTO Users (NetID, PasswordHash, FirstName, LastName)
--- VALUES ('netID', 'hashed_password', 'John', 'Doe');
