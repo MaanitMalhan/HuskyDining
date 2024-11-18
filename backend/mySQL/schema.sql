@@ -20,6 +20,20 @@ CREATE TABLE IF NOT EXISTS reviews (
     reviewDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS requests (
+    id INT NOT NULL AUTO_INCREMENT,
+    requester_id INT NOT NULL, -- User who created the request
+    recipient_id INT NOT NULL, -- User for whom the request is intended
+    transaction_type ENUM('donate', 'request') NOT NULL,
+    request_type ENUM('flex_pass', 'points') NOT NULL,
+    amount INT NOT NULL CHECK (amount > 0),
+    status ENUM('pending', 'accepted', 'denied') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (requester_id) REFERENCES students(peoplesoft),
+    FOREIGN KEY (recipient_id) REFERENCES students(peoplesoft)
+);
+
 -- INSERT INTO students (netid, name, points, flex_passes)
 -- VALUES
 -- ('fha60182', 'John Doe', 200, 40),
