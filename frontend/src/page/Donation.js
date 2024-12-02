@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
@@ -8,17 +8,77 @@ const Donation = () => {
     const [recipient, setRecipient] = useState('');
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmationMessage, setConfirmationMessage] = useState('');
+    const [donationHistory, setDonationHistory] = useState([]);
 
-
-    const handleDonationSubmit = (e) => {
+    const handleDonationSubmit = async (e) => {
         e.preventDefault();
 
-        setConfirmationMessage(`Thank you for donating ${amount} ${donationType} to ${recipient}!`); //Simple confirmation
-        setShowConfirmation(true);
-        setDonationType('');  //Reset the form
-        setAmount('');
-        setRecipient('');
+        if (!donationType || !amount || amount <= 0 || !recipient) {
+            alert('Please fill all fields with valid data.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/donations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    netid: 'your-netid-here',
+                    donationType,
+                    amount: parseInt(amount, 10),
+                    recipient
+                }),
+            });
+
+            if (response.ok) {
+                setConfirmationMessage(`Thank you for donating ${amount} ${donationType} to ${recipient}!`);
+                setShowConfirmation(true);
+                setDonationType('');
+                setAmount('');
+                setRecipient('');
+                fetchDonationHistory();
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.message}`);
+            }
+        } catch (err) {
+            console.error('Error submitting donation:', err);
+            alert('An error occurred. Please try again.');
+        }
     };
+
+    // const fetchDonationHistory = async () => {
+    //     try {
+    //         const response = await fetch('/donations/your-netid-here');
+    //         const history = await response.json();
+    //         setDonationHistory(history);
+    //     } catch (err) {
+    //         console.error('Error fetching donation history:', err);
+    //     }
+    // };
+
+    const fetchDonationHistory = async () => {
+        // Stubbed data to simulate backend response
+        const mockHistory = [
+            {
+                transaction_type: "points",
+                amount: 100,
+                transaction_date: "2024-11-01T10:00:00Z",
+                recipient: "Recipient A",
+            },
+            {
+                transaction_type: "flexPass",
+                amount: 5,
+                transaction_date: "2024-11-02T15:30:00Z",
+                recipient: "Recipient B",
+            },
+        ];
+        setDonationHistory(mockHistory);
+    };
+    
+    useEffect(() => {
+        fetchDonationHistory();
+    }, []);
 
     return (
         <div>
@@ -57,12 +117,21 @@ const Donation = () => {
                 </form>
 
                 {showConfirmation && (
-                    <div 
-                    className="confirmation-message">
+                    <div className="confirmation-message">
                         {confirmationMessage}
                     </div>
                 )}
-
+                <section className="donation-history">
+                    <h3>Your Donation History</h3>
+                    <ul>
+                        {donationHistory.map((donation, index) => (
+                            <li key={index}>
+                                Donated {donation.amount} {donation.transaction_type} to {donation.recipient} on{' '}
+                                {new Date(donation.transaction_date).toLocaleDateString()}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
             </main>
             <Footer />
         </div>
