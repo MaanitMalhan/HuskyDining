@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Header from '../components/header';
 import Footer from '../components/footer';
 import huskyLogo from '../assets/husky.png'; // This points to the logo in the assets folder

@@ -1,14 +1,16 @@
+
 import './App.css';
 import Home from './page/home';
 import Menu from './page/Menu';
+import Request from './page/request'
 import Donation from './page/Donation';
-import Login from './page/Login';
-import SignUp from './page/SignUp';
-import Dashboard from './page/Dashboard';
-import Account from './page/Account'; // Import Account component for account info display
-import PrivateRoute from './components/PrivateRoute';
-import { AuthProvider } from './context/AuthContext';
+import Menusupport from './components/Menusupport';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './page/Login'; // Import Login component
+import SignUp from './page/SignUp'; // Import SignUp component
+import Dashboard from './page/Dashboard'; // Import Dashboard component
+import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute for protecting routes
+import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
 
 function App() {
   return (
@@ -35,6 +37,7 @@ function App() {
           </Routes>
         </Router>
       </AuthProvider>
+
     </div>
   );
 }
