@@ -1,30 +1,63 @@
 import express from 'express';
-import { getStudent, getStudents, addStudent, updateStudent, deleteStudent } from './server.js';
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
+import { getStudent, getStudents, addStudent, updateStudent, deleteStudent, createTransaction, acceptTransaction, getTransaction } from './server.js';
 
-dotenv.config();
-
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-}).promise();
-
-const app = express();
+const app = express()
 
 app.use(express.json());
 
-app.get('/students', async (req, res) => {
-    const notes = await getStudents();
-    res.send(notes);
+app.get('/students', async (req, res) =>{
+    const notes = await getStudents()
+    res.send(notes)
+})
+
+app.get('/students/:peoplesoft', async (req, res) =>{
+    const peoplesoft = req.params.peoplesoft
+    const student = await getStudent(peoplesoft)
+    res.send(student)
+} )
+
+// Create transaction 'pending'
+app.post('/request', async (req, res) => {
+    try {
+        const { requesterId, recipientId, transactionType, requestType, amount } = req.body;
+
+        if (!['flex_pass', 'points'].includes(requestType)) {
+            throw new Error("Invalid request type");
+        }
+        if (!['donate', 'request'].includes(transactionType)) {
+            throw new Error("Invalid transaction type");
+        }
+        if (amount <= 0) {
+            throw new Error("Amount must be greater than zero");
+        }
+
+        const result = await createTransaction(requesterId, recipientId, transactionType, requestType, amount);
+        res.status(201).json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-app.get('/students/:peoplesoft', async (req, res) => {
-    const peoplesoft = req.params.peoplesoft;
-    const student = await getStudent(peoplesoft);
-    res.send(student);
+// Accept/deny transaction
+app.post('/request/:requestId', async (req, res) => {
+    try {
+        const requestId = req.params.requestId;
+        const result = await acceptTransaction(requestId);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+// Get transaction data
+app.get('/request/:requestId', async (req, res) => {
+    try {
+        const requestId = req.params.requestId;
+        const request = await getTransaction(requestId)
+        res.send(request)
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
 // Add a new student
@@ -120,6 +153,7 @@ app.get('/donations/:netid', async (req, res, next) => {
         next(err);
     }
 });
+
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

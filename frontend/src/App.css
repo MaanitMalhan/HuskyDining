@@ -3,50 +3,45 @@
   text-align: center;
 }
 
-/* Container for the logo to control its size and centering */
+/* Page Container to keep footer at the bottom */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Logo Container Styling */
 .logo-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Full width container */
-  padding: 20px 0; /* Add some vertical padding to make the container visually bigger */
-  background-color: #DCD8D1; /* Add a background color to highlight the container */
+  width: 100%;
+  padding: 10px 0;
+  background-color: #DCD8D1;
   margin-bottom: 20px;
 }
 
-
-
-/* Styling for the logo image itself */
+/* Logo Image Styling */
 .logo-image {
-  width: 80%; /* Adjust to make the logo fit the width of the container */
-  max-width: 1000px; /* Ensure it doesn't get too big on large screens */
+  width: 70%;
+  max-width: 800px;
   height: auto;
-  object-fit: contain; /* Ensures the logo fits inside the container without being distorted */
-}
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  object-fit: contain;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Welcome Text Styling */
+.welcome-text {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
 /* Header Styling */
 .header {
   background-color: #000080;  /* Navy Blue */
-  padding: 10px 0;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,7 +49,12 @@
 
 .header h1 {
   color: white;
-  margin-left: 20px;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
 }
 
 .nav-links a {
@@ -68,24 +68,50 @@
   text-decoration: underline;
 }
 
+/* Login/Logout Button Styling */
+.login, .logout {
+  background-color: #00509e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.login:hover, .logout:hover {
+  background-color: #003f7f;
+}
+
+/* Search bar styling */
 .search-bar {
-  margin-left: auto;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
   margin-right: 10px;
 }
 
-.search, .sign-in {
-  margin-right: 20px;
+.search {
+  background-color: #00509e;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search:hover {
+  background-color: #003f7f;
 }
 
 /* Footer Styling */
 footer {
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  background-color: #000080;  /* Navy Blue */
+  background-color: #000080;
   color: white;
   text-align: center;
   padding: 10px 0;
+  width: 100%;
+  margin-top: auto;  /* Ensures footer stays at the bottom */
 }
 
 /* Main Content Styling */
@@ -112,14 +138,12 @@ ul {
 }
 
 /* Image Styling */
-
 img {
-  width: 100%;      /* Makes the image span the width of its container */
-  max-height: 400px; /* Set a maximum height to avoid the image becoming too tall */
-  object-fit: cover; /* Ensures the image covers the area without distortion */
-  margin: 20px 0;    /* Adds margin above and below the image */
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  margin: 20px 0;
 }
-
 
 /* Donation Page Styling */
 .donation-page {
@@ -204,4 +228,129 @@ img {
 .confirmation-message::before {
   content: "✔️"; /* Checkmark icon */
   font-size: 1.2em;
+}
+
+/* Account Page Styling */
+.account-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.account-details {
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.account-details p {
+  margin: 10px 0;
+}
+
+/* Transactions Styling */
+.transactions-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.transactions-list li {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.transactions-list li:last-child {
+  border-bottom: none;
+}
+
+.transactions-list p {
+  margin: 5px 0;
+}
+
+/* Page Container to keep footer at the bottom */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  min-width: 100vh;
+}
+
+/* Login Container Styling */
+.login-container {
+  flex: 1; /* Allows the container to grow and center vertically */
+  max-width: 400px;
+  max-height: 500px; /* Set a maximum height for the login container */
+  margin: 100px auto; /* Adjust margin to reduce space */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Login Form Spacing */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduce gap to make the form more compact */
+}
+
+.login-container h2 {
+  margin-bottom: 15px; /* Adjust heading margin */
+  color: #000080;
+}
+
+.login-form label {
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+}
+
+.login-form input {
+  padding: 8px; /* Reduce padding for inputs */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form input:focus {
+  border-color: #000080;
+  outline: none;
+}
+
+.login-button {
+  background-color: #000080;
+  color: white;
+  padding: 8px; /* Reduce button padding */
+  font-size: 16px; /* Adjust font size */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.login-button:hover {
+  background-color: #00509e;
+}
+
+
+.go-back-button {
+  background-color: #000080; /* Navy color */
+  color: white;
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.go-back-button:hover {
+  background-color: #00509e; /* Darker navy on hover */
 }

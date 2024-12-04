@@ -1,17 +1,54 @@
-/* dining hall list CSS */
-
-.hallList h1 {
+/* General Styles for the Body and HTML */
+html, body {
+  height: 100%;        /* Ensure full height */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 36px;
 }
 
-.hallList{
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  text-decoration: none;
-  color: black;
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;   /* Ensure the page fills the screen height */
+}
 
-} 
+.menuHeading{
+  text-align: center;
+  font-size: 18px;
+  margin: 20px 0;  
+}
+/* Wrapper for both sections (Dining Halls & Restaurants) */
+.hallListsWrapper {
+  display: flex;
+  justify-content: space-between;   /* Space between the two sections */
+  align-items: flex-start;          /* Align lists to the top */
+  gap: 20px;                        /* Space between the two sections */
+  margin: 20px;
+}
+
+/* Container for each section (Dining Halls / Restaurants) */
+.section {
+  display: flex;
+  flex-direction: column;  /* Stack title and list vertically */
+  width: 48%;              /* Each section takes 48% of the width */
+}
+
+/* Styles for the lists (Optional) */
+.hallList {
+  font-size: 18px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.hallList ol {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
 
 .hallList a {
   text-decoration: none;
@@ -19,25 +56,23 @@
 }
 
 .hallList a:hover {
-  text-decoration: none; 
-  color: red; 
+  color: red;
 }
 
 
 /* Header CSS */
-.header{
+.header {
   background-color: rgb(22, 11, 142);
   color: white;
   padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 }
 
 .header input[type="text"] {
   padding: 5px;
   margin-left: 15px;
-  width: 200px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -58,7 +93,7 @@
   color: rgb(22, 11, 142);
 }
 
-.header a{
+.header a {
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -71,9 +106,8 @@
   padding: 20px;
   text-align: center;
   font-size: 14px;
-  position: absolute;
-  bottom: 0;
-  width: 100%
+  position: relative;
+  margin-top: auto;               /* Push footer to the bottom */
 }
 
 
