@@ -102,6 +102,59 @@ app.delete('/students/:peoplesoft', async (req, res, next) => {
     }
 });
 
+// Process a donation
+app.post('/donations', async (req, res, next) => {
+    try {
+        const { netid, donationType, amount } = req.body;
+        if (!netid || !donationType || !amount) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        if (donationType === 'points') {
+            await pool.query(
+                `UPDATE students SET points = points + ? WHERE netid = ?`,
+                [amount, netid]
+            );
+        } else if (donationType === 'flexPass') {
+            await pool.query(
+                `UPDATE students SET flex_passes = flex_passes + ? WHERE netid = ?`,
+                [amount, netid]
+            );
+        } else {
+            return res.status(400).json({ message: 'Invalid donation type' });
+        }
+
+        // Log the donation in the transactions table
+        await pool.query(
+            `INSERT INTO transactions (netid, transaction_type, amount)
+             VALUES (?, ?, ?)`,
+            [netid, donationType, amount]
+        );
+
+        res.status(201).json({ message: 'Donation successful' });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Get donation history for a user
+app.get('/donations/:netid', async (req, res, next) => {
+    try {
+        const netid = req.params.netid;
+        const [history] = await pool.query(
+            `SELECT transaction_type, amount, transaction_date
+             FROM transactions
+             WHERE netid = ?
+             ORDER BY transaction_date DESC`,
+            [netid]
+        );
+        res.json(history);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 // Error-handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

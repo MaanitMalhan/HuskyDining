@@ -1,6 +1,7 @@
 CREATE DATABASE dining_hall;
 USE dining_hall;
 
+
 CREATE TABLE IF NOT EXISTS students (
     peoplesoft INT NOT NULL AUTO_INCREMENT,
     netid VARCHAR(255) NOT NULL UNIQUE,
@@ -9,6 +10,7 @@ CREATE TABLE IF NOT EXISTS students (
     points INT DEFAULT 0,
     flex_passes INT DEFAULT 0,
     PRIMARY KEY (peoplesoft)
+
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
@@ -34,9 +36,11 @@ CREATE TABLE IF NOT EXISTS requests (
     FOREIGN KEY (recipient_id) REFERENCES students(peoplesoft)
 );
 
+
 -- INSERT INTO students (netid, name, points, flex_passes)
 -- VALUES
 -- ('fha60182', 'John Doe', 200, 40),
+
 -- ('vjah2145', 'Jane Doe', 200, 40);
 
 -- Json for fake data to Post

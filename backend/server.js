@@ -36,6 +36,7 @@ export async function getStudent(peoplesoft){
     return rows[0]
 }
 
+
 export async function createTransaction(requesterId, recipientId, transactionType, requestType, amount) {
     // Check if the requester exists
     const [requesterRows] = await dining_hall.query(
@@ -173,6 +174,7 @@ export async function addStudent({ netid, name, points, flex_passes }) {
 
 // Function to update a student
 export async function updateStudent(peoplesoft, { points, flex_passes }) {
+
     const [result] = await dining_hall.query(`
     UPDATE students 
     SET points = ?, flex_passes = ? 
@@ -182,6 +184,7 @@ export async function updateStudent(peoplesoft, { points, flex_passes }) {
 
 // Function to delete a student
 export async function deleteStudent(peoplesoft) {
+
     const [result] = await dining_hall.query(`
     DELETE FROM students 
     WHERE peoplesoft = ?`, [peoplesoft]);

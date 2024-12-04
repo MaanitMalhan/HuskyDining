@@ -1,4 +1,5 @@
 CREATE DATABASE ledger_db;
+
 USE ledger_db;
 
 CREATE TABLE IF NOT EXISTS users (
