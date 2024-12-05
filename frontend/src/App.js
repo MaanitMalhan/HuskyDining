@@ -18,14 +18,26 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} /> {/* Home Page */}
-            <Route path="/menu" element={<Menu />} /> {/* Menu Page */}
+            <Route path="/" element={<Home />} />  {/* Home Page */}
+            <Route path="/menu" element={<Menu />} />  {/* Menu Page */}
             <Route path="/login" element={<Login />} /> {/* Login Page */}
             <Route path="/signup" element={<SignUp />} /> {/* Sign-Up Page */}
-            <Route path="/reviews" element={<Reviews />} /> {/* Sign-Up Page */}
+            
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } />
+            <Route path="/account" element={
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            } />
           </Routes>
         </Router>
       </AuthProvider>
+
     </div>
   );
 }

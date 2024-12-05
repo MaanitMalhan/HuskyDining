@@ -471,3 +471,148 @@ footer {
   width: 600px;
   height: 512px;
 }
+
+.confirmation-message {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e0ffe4;
+  color: #2b7a2b;
+  border: 1px solid #2b7a2b;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirmation-message::before {
+  content: "✔️"; /* Checkmark icon */
+  font-size: 1.2em;
+}
+
+/* Account Page Styling */
+.account-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.account-details {
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.account-details p {
+  margin: 10px 0;
+}
+
+/* Transactions Styling */
+.transactions-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.transactions-list li {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.transactions-list li:last-child {
+  border-bottom: none;
+}
+
+.transactions-list p {
+  margin: 5px 0;
+}
+
+/* Page Container to keep footer at the bottom */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  min-width: 100vh;
+}
+
+/* Login Container Styling */
+.login-container {
+  flex: 1; /* Allows the container to grow and center vertically */
+  max-width: 400px;
+  max-height: 500px; /* Set a maximum height for the login container */
+  margin: 100px auto; /* Adjust margin to reduce space */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Login Form Spacing */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduce gap to make the form more compact */
+}
+
+.login-container h2 {
+  margin-bottom: 15px; /* Adjust heading margin */
+  color: #000080;
+}
+
+.login-form label {
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+}
+
+.login-form input {
+  padding: 8px; /* Reduce padding for inputs */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form input:focus {
+  border-color: #000080;
+  outline: none;
+}
+
+.login-button {
+  background-color: #000080;
+  color: white;
+  padding: 8px; /* Reduce button padding */
+  font-size: 16px; /* Adjust font size */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.login-button:hover {
+  background-color: #00509e;
+}
+
+
+.go-back-button {
+  background-color: #000080; /* Navy color */
+  color: white;
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.go-back-button:hover {
+  background-color: #00509e; /* Darker navy on hover */
+}
