@@ -1,16 +1,16 @@
-
-import './App.css';
-import Home from './page/home';
-import Menu from './page/Menu';
-import Request from './page/request'
-import Donation from './page/Donation';
-import Menusupport from './components/Menusupport';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './page/Login'; // Import Login component
-import SignUp from './page/SignUp'; // Import SignUp component
-import Dashboard from './page/Dashboard'; // Import Dashboard component
-import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute for protecting routes
-import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
+import "./App.css";
+import Home from "./page/home";
+import Menu from "./page/Menu";
+import Reviews from "./page/reviews";
+import Request from "./page/request";
+import Donation from "./page/Donation";
+import Menusupport from "./components/Menusupport";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./page/Login"; // Import Login component
+import SignUp from "./page/SignUp"; // Import SignUp component
+import Dashboard from "./page/Dashboard"; // Import Dashboard component
+import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute for protecting routes
+import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 
 function App() {
   return (

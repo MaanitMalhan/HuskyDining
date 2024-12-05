@@ -37,17 +37,6 @@ const Header = () => {
         <Link to="/reviews">Reviews</Link>
       </div>
 
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search..."
-        className="search-bar"
-        style={{ marginLeft: "auto", marginRight: "10px" }}
-      />
-      <button className="search" style={{ marginRight: "10px" }}>
-        Search
-      </button>
-
       {/* Log In Button with navigate onClick */}
       <button
         className="sign-in"
