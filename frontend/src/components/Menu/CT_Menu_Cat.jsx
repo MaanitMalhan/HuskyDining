@@ -12,7 +12,7 @@ const CT_Menu_Cat = () => {
           <div className="py-10 pl-5 bg-gradient-to-br from-black/90 to-black/70 text-white rounded-3xl relative h-[320px] flex items-end">
             <div>
               <div className="mb-4">
-                <p className="mb-[2px] text-gray-400">Help</p>
+                <p className="mb-[2px] text-gray-400">~placeholder~</p>
                 <p className="text-2xl font-semibold mb-[2px]">
                   a student with
                 </p>
