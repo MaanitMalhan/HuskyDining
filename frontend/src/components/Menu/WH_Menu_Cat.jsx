@@ -15,11 +15,11 @@ const WH_Menu_Cat = () => {
                 <p className="mb-[2px] text-white"></p>
                 <p className="text-2xl font-semibold mb-[2px]"></p>
                 <p className="text-4xl xl:text-5xl font-bold mb-2 text-white">
-                  Donate
+                  Whitney
                 </p>
                 <Link to="/donate">
                   <Button
-                    text="Press Me"
+                    text="~placeholder~"
                     bgColor={"bg-blue"}
                     textColor={"text-white"}
                   />
@@ -37,9 +37,9 @@ const WH_Menu_Cat = () => {
             <div>
               <div className="mb-4">
                 <p className="mb-[2px] text-white"></p>
-                <p className="text-2xl font-semibold mb-[2px]">Point:</p>
+                <p className="text-2xl font-semibold mb-[2px]">~placeholder~</p>
                 <p className="text-4xl xl:text-5xl font-bold opacity-20 mb-2">
-                  #amount of points in account#
+                  ~placeholder~
                 </p>
               </div>
             </div>
@@ -49,9 +49,9 @@ const WH_Menu_Cat = () => {
             <div>
               <div className="mb-4">
                 <p className="mb-[2px] text-white"></p>
-                <p className="text-2xl font-semibold mb-[2px]">FlexPass:</p>
+                <p className="text-2xl font-semibold mb-[2px]">~placeholder~</p>
                 <p className="text-4xl xl:text-5xl font-bold opacity-40 mb-2">
-                  #amount of flex pass in account#
+                  ~placeholder~
                 </p>
               </div>
             </div>
