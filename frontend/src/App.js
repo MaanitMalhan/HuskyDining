@@ -1,6 +1,7 @@
 import "./App.css";
 import Home from "./page/home";
 import Menu from "./page/Menu";
+import Account from './page/Account';
 import Reviews from "./page/reviews";
 import Request from "./page/request";
 import Donation from "./page/Donation";
@@ -22,6 +23,11 @@ function App() {
             <Route path="/menu" element={<Menu />} />  {/* Menu Page */}
             <Route path="/login" element={<Login />} /> {/* Login Page */}
             <Route path="/signup" element={<SignUp />} /> {/* Sign-Up Page */}
+            <Route path="/request" element={<Request />} /> {/* request Page */}
+            <Route path="/donation" element={<Donation />} /> {/* donation Page */}
+            <Route path="/reviews" element={<Reviews />} /> {/* reviews Page */}
+
+
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={
