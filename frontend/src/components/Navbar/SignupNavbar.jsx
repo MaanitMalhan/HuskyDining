@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Shared/Button2";
+import Button from "../Shared/Button_OnClick";
 import { Link } from "react-router-dom";
 
 const LoginNavbar = () => {

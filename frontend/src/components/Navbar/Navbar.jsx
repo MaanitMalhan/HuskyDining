@@ -4,7 +4,7 @@ import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import { Link } from "react-router-dom";
-import Button from "../Shared/Button2";
+import Button from "../Shared/Button_OnClick";
 
 const MenuLinks = [
   {
