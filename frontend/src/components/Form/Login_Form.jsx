@@ -34,7 +34,7 @@ const Login = () => {
     <div className="container w-11/12 max-w-[700px] px-10 py-20 rounded-3xl bg-white border-2 border-gray-100 mt-40 mb-48">
       <h1 className="text-5xl font-semibold">Welcome Back</h1>
       <p className="font-medium text-lg text-gray-500 mt-4">
-        Welcome back! Please enter you details.
+        Please enter you details.
       </p>
       <div className="mt-8">
         <form onSubmit={handleSubmit}>
