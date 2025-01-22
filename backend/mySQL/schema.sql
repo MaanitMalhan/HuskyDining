@@ -1,7 +1,6 @@
 CREATE DATABASE dining_hall;
 USE dining_hall;
 
-
 CREATE TABLE IF NOT EXISTS students (
     peoplesoft INT NOT NULL AUTO_INCREMENT,
     netid VARCHAR(255) NOT NULL UNIQUE,
@@ -10,7 +9,6 @@ CREATE TABLE IF NOT EXISTS students (
     points INT DEFAULT 0,
     flex_passes INT DEFAULT 0,
     PRIMARY KEY (peoplesoft)
-
 );
 
 CREATE TABLE IF NOT EXISTS reviews (

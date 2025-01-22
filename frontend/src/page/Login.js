@@ -5,34 +5,35 @@ import Footer from '../components/footer';
 
 const Login = () => {
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
+  const [netid, setNetid] = useState('');  // Change 'email' to 'netid'
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://your-backend.com/api/login', {
+      const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ netid, password }),  // Send 'netid' instead of 'email'
       });
       const data = await response.json();
       
-      if (data.token) {
-        login(data.token); // Call login function with token
-        navigate('/dashboard'); // Redirect to dashboard after login
+      if (data.Login) {
+        login(data.token);  // Call login function with token
+        navigate('/dashboard');  // Redirect to dashboard after login
       } else {
-        alert('Login failed');
+        alert('Login failed: ' + data.message);  // Show the error message from backend
       }
     } catch (error) {
       console.error('Error logging in:', error);
+      alert('Error logging in: ' + error.message);
     }
   };
 
   // Function to navigate back to the home page
   const handleGoBack = () => {
-    navigate('/'); // Navigate to the home page
+    navigate('/');  // Navigate to the home page
   };
 
   return (
@@ -40,13 +41,13 @@ const Login = () => {
       <div className="login-container">
         <h2>Log In</h2>
         <form onSubmit={handleSubmit} className="login-form">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="netid">NetID</label> {/* Change label to 'NetID' */}
           <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            id="netid"
+            placeholder="Enter your netid"
+            value={netid}
+            onChange={(e) => setNetid(e.target.value)}  // Set 'netid' state
             required
           />
 

@@ -1,9 +1,23 @@
 import express from 'express';
-import { getStudent, getStudents, addStudent, updateStudent, deleteStudent, createTransaction, acceptTransaction, getTransaction } from './server.js';
+import mysql from 'mysql2'
+import cors from "cors";
+import { getStudent, getStudents, addStudent, updateStudent, deleteStudent, createTransaction, acceptTransaction, getTransaction, login } from './server.js';
 
 const app = express()
 
 app.use(express.json());
+app.use(cors());
+
+// Login 
+app.post('/api/login', async (req, res) => {
+    // return res.send("gay");
+    const data = await login(req.body.netid, req.body.password)
+    if (data.error){
+        res.status(data.ErrorMsg[0]).json(data.ErrorMsg[1])
+    } else {
+        res.send(data)
+    }
+});
 
 app.get('/students', async (req, res) =>{
     const notes = await getStudents()
@@ -153,6 +167,7 @@ app.get('/donations/:netid', async (req, res, next) => {
         next(err);
     }
 });
+
 
 
 // Error-handling middleware

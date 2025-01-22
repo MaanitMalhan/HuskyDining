@@ -1,6 +1,8 @@
 //server.js
 import mysql from 'mysql2'
 import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken';
+import { json } from 'express';
 dotenv.config()
 
 const dining_hall = mysql.createPool({
@@ -23,6 +25,23 @@ const auth_db = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: "auth_db"
 }).promise();
+
+export async function login(netid, password) {
+    const sql = `SELECT * FROM students WHERE netid = ? AND password = ?`;
+
+    const [data] = await dining_hall.query(
+        sql, 
+        [netid, password]
+    );
+
+    if (data.length > 0) {
+        const id = data[0].peoplesoft;
+        const token = jwt.sign({ id }, "jwtSecretKey", { expiresIn: 300 });
+        return {error: false, Login: true, token, data};
+    } else {
+        return {error: true, Login: false, ErrorMsg:[401, "Invalid Credentials"]}
+    }
+}
 
 export async function getStudents(){
     const [rows] = await dining_hall.query(`SELECT * FROM students`)
@@ -190,3 +209,4 @@ export async function deleteStudent(peoplesoft) {
     WHERE peoplesoft = ?`, [peoplesoft]);
     return result.affectedRows;
 }
+
