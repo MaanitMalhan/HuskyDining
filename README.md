@@ -1,5 +1,11 @@
 # Getting Started with HuskyDining
 
+In root:
+
+### `npm install`
+
+Make a .env file in the same directory that the .env.example file is. In the docs in our shared docs I have included what should go in that env.
+
 In the root directory, you can run:
 
 ### `npm run dev`
