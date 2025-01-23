@@ -8,6 +8,12 @@ Make a .env file in the same directory that the .env.example file is. In the doc
 
 In the root directory, you can run:
 
+Navigate to Frontend Folder:
+
+### `npm install`
+
+then in root:
+
 ### `npm run dev`
 
 Runs both backend and frontend in the development mode.\
