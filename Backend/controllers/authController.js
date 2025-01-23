@@ -83,10 +83,10 @@ const logoutUser = asyncHandler(async (req, res) => {
       await redis.del(`refreshToken:${decoded.userId}`);
     }
 
-    // res.cookie("accessToken", "", {
-    //   httpOnly: true,
-    //   expires: new Date(0),
-    // });
+    res.cookie("accessToken", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
 
     res.cookie("refreshToken", "", {
       httpOnly: true,
