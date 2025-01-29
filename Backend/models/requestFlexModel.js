@@ -8,7 +8,7 @@ const requestFlexSchema = new mongoose.Schema(
     },
     diningHallID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "DiningHall", // Reference to the User schema
+      ref: "DiningHall", // Reference to the DiningHall schema
     },
     amount: {
       type: Number,
@@ -18,7 +18,7 @@ const requestFlexSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "inProgress", "resolved"], // Status of the request
+      enum: ["pending", "fulfilled"], // Status of the request
       default: "pending",
     },
     priority: {
@@ -26,9 +26,14 @@ const requestFlexSchema = new mongoose.Schema(
       enum: ["low", "medium", "high"], // Priority level
       default: "medium",
     },
+    expiresAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
+      expires: 5 * 24 * 60 * 60, // TTL in seconds (5 days)
+    },
   },
   {
-    timestamps: true,
+    timestamps: true, // Adds createdAt and updatedAt fields
   }
 );
 

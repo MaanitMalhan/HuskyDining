@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { type } from "os";
 
 const userSchema = mongoose.Schema(
   {
@@ -23,6 +24,13 @@ const userSchema = mongoose.Schema(
     points: {
       type: Number,
       default: 500,
+    },
+    isMfaActive: {
+      type: Boolean,
+      default: false,
+    },
+    twoFactorSecret: {
+      type: String,
     },
   },
   {

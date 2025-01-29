@@ -1,14 +1,15 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import RequestFlex from "../models/requestFlexModel.js";
 import mongoose from "mongoose";
 
 // @desc User Request Flex Transaction
 // route GET /api/transaction/flex
 // @access Private
 const requestFlexTransaction = asyncHandler(async (req, res) => {
-  const { fromUserId, toUserId, flexPassCount } = req.body;
+  const { requestId, fromUserId, toUserId, flexPassCount } = req.body;
 
-  if (!fromUserId || !toUserId || !flexPassCount) {
+  if (!fromUserId || !toUserId || !flexPassCount || !requestId) {
     res.status(400);
     throw new Error(
       "Please provide all required fields: fromUserId, toUserId, flexpassCount"
@@ -18,6 +19,14 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+    const request = await RequestFlex.findByIdAndUpdate(
+      requestId,
+      {
+        status: "fulfilled",
+        expiresAt: new Date(Date.now()),
+      },
+      { new: true, session }
+    );
 
     // Subtract flexpass from sender
     const sender = await User.findByIdAndUpdate(
@@ -57,7 +66,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
     await session.abortTransaction();
     session.endSession();
     res.status(400);
-    throw new Error(error.message);
+    throw new Error("Error Proccessing Transaction");
   }
 });
 

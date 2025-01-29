@@ -1,18 +1,21 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import qrCode from "qrcode";
 import { redis } from "../config/redis.js";
 import jwt from "jsonwebtoken";
+import speakeasy from "speakeasy";
 
 // @desc Auth user/set token
 // route POST /api/auth/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, token } = req.body;
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPasswords(password))) {
+  // If user doesn't have 2FA then use this login flow
+  if (!user.isMfaActive && user && (await user.matchPasswords(password))) {
     const accessToken = await generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
@@ -21,8 +24,31 @@ const loginUser = asyncHandler(async (req, res) => {
       token: accessToken,
     });
   } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
+    // Verify 2FA Code
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: "base32",
+      token,
+    });
+
+    // Use 2FA code to validate it is the user and login, error if not
+    if (verified) {
+      if (user && (await user.matchPasswords(password))) {
+        const accessToken = await generateToken(res, user._id);
+        res.status(201).json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          token: accessToken,
+        });
+      } else {
+        res.status(401);
+        throw new Error("Invalid email or password");
+      }
+    } else {
+      res.status(500);
+      throw new Error("Invalid 2FA Verification");
+    }
   }
 });
 
@@ -117,6 +143,9 @@ const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "User profile" });
 });
 
+// @desc Update Access Token
+// route PUT /api/auth/refresh
+// @access Public
 const refreshToken = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
@@ -145,6 +174,76 @@ const refreshToken = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc 2FA Setup
+// route PUT /api/auth/2fa/setup
+// @access Private
+const setup2FA = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  if (!user) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+
+  try {
+    var secret = speakeasy.generateSecret();
+    user.twoFactorSecret = secret.base32;
+    user.isMfaActive = true;
+    await user.save();
+
+    const url = speakeasy.otpauthURL({
+      secret: secret.base32,
+      label: `HUSKY DINING`,
+      issuer: "HuskyDining",
+      encoding: "base32",
+    });
+
+    const qrImageUrl = await qrCode.toDataURL(url);
+    res.status(200).json({
+      qrCode: qrImageUrl,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Error Setting Up 2FA");
+  }
+});
+
+// @desc 2FA Verify
+// route PUT /api/auth/2fa/verify
+// @access Private
+const verify2FA = asyncHandler(async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = req.user;
+
+    const verfiy = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: "base32",
+      token,
+    });
+
+    if (verfiy) {
+      pass;
+    }
+  } catch (error) {}
+});
+
+// @desc 2FA Reset
+// route PUT /api/auth/2fa/reset
+// @access Private
+const reset2FA = asyncHandler(async (req, res) => {
+  try {
+    const user = req.user;
+    user.twoFactorSecret = "";
+    user.isMfaActive = false;
+    await user.save();
+    res.status(200).json({ message: "2FA Reset" });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Error Reseting 2FA");
+  }
+});
+
 export {
   loginUser,
   registerUser,
@@ -152,4 +251,7 @@ export {
   getUserProfile,
   updateProfile,
   refreshToken,
+  setup2FA,
+  verify2FA,
+  reset2FA,
 };
