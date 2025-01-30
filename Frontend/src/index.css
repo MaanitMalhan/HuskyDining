@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "OI-Regular";
+  src: local("Oi-Regular"),
+    url("./assets/fonts/Oi-Regular.tiff") format("truetype");
+}
