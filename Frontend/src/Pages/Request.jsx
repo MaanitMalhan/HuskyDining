@@ -8,17 +8,17 @@ import { useCreateRequestMutation } from "../slices/requestApiSlice";
 export const Request = () => {
   const [page, setPage] = useState(1);
   const { data: requests = [], isFetching } = useGetRequestsQuery(page);
-  const [netid, setNetid] = useState("");
+  const [userID, setUserID] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("Point");
+  const [diningHallID, setDiningHallID] = useState("");
 
-  const [requestData, setRequestData] = useState("");
   const [createRequest, { isLoading, isError, error }] = useCreateRequestMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await createRequest({ netid, amount, type}).unwrap();
+      const response = await createRequest({userID, diningHallID, amount, type}).unwrap();
       console.log("Request created successfully:", response);
       setRequestData(""); 
       setNetid("");
@@ -30,37 +30,55 @@ export const Request = () => {
   };
 
   return (
-    <div className="">
-      <form
-              onSubmit={handleSubmit}
-              autoComplete="off"
-              className="w-[500px] mx-auto h-full flex flex-col justify-evenly"
-            >
-      <h1 className="text-3xl font-semibold">Request</h1>
-      <h2>Enter NetId</h2>
-      <input
-        key={1}
-        type="netid"
-        value={netid}
-        onChange={(e) => setNetid(e.target.value)}
+    <div className="p-4">
+      <form onSubmit={handleSubmit} autoComplete="off" className="w-[500px] mx-auto flex flex-col space-y-4">
+        <h1>Request</h1>
+
+        <label htmlFor="userID">Enter NetId</label>
+        <input
+          id="userID"
+          type="text"
+          value={userID}
+          onChange={(e) => setUserID(e.target.value)}
+
         />
-      <h2>Current Type: {type}</h2>
-      <button onClick={() => setType("Point")}>Change Type to Points</button>
-      <button onClick={() => setType("Flex")}>Change Type to Flex Passes</button>
-      <h2>Enter Amount</h2>
-      <input
-        key={1}
-        type="amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      
-      <button type="submit" disabled={isLoading}>
-          {isLoading ? "Submitting..." : "Submit Request"}
+
+        <label htmlFor="diningHallID">Enter Dining Hall ID</label>
+        <input
+          id="diningHallID"
+          type="text"
+          value={diningHallID}
+          onChange={(e) => setDiningHallID(e.target.value)}
+        />
+
+        <h2>Current Type: {type}</h2>
+        <div className="flex space-x-2">
+          <button type="button"  onClick={() => setType("Point")}>
+            Set to Points
+          </button>
+          <button type="button" onClick={() => setType("Flex")}>
+            Set to Flex Passes
+          </button>
+        </div>
+
+        <label htmlFor="amount">Enter Amount</label>
+        <input
+          id="amount"
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+
+        <button disabled={isLoading} type="submit">
+          {isLoading ? "Creating..." : "Create Request"}
         </button>
+
+        {isError && <p className="text-red-500">Error: {error?.data?.message || "Failed to create request"}</p>}
       </form>
+
+      <h1>Available requests</h1>
+
       <Navbar />
     </div>
-    
   );
 };
