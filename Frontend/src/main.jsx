@@ -11,7 +11,7 @@ import { Request } from "./Pages/Request";
 import { Login } from "./Pages/Login";
 import { Register } from "./Pages/Register";
 import { Donate } from "./Pages/Donate.jsx";
-import { Home_logedout } from "./Pages/Home.jsx";
+import { Home_loggedout } from "./Pages/Home.jsx";
 import { useSelector } from "react-redux";
 import { PrivateRoute, PrivateRouteDashboard } from "./components/PrivateRoute";
 
@@ -21,7 +21,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<App />}>
-        <Route index element={<Home_logedout />} />
+        <Route index element={<Home_loggedout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />

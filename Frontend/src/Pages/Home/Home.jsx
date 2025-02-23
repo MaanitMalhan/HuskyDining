@@ -51,6 +51,7 @@ export const Home = () => {
 
   return (
     <div className="">
+      <h1>TESTING</h1>
       <Navbar title={"home"} />
 
       <div className="rounded-lg h-[calc(100vh-64px)] overflow-y-auto w-[100%] mt-[51px]">
@@ -118,5 +119,6 @@ export const Home = () => {
         </PanelGroup>
       </div>
     </div>
+
   );
 };
