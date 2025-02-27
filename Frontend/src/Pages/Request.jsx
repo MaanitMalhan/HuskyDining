@@ -21,6 +21,8 @@ export const Request = () => {
     try {
       const response = await createRequest({userID, diningHallID, amount, type}).unwrap();
       console.log("Request created successfully:", response);
+
+      setRequestData(""); 
       setNetid("");
       setAmount("");
       setType("");
@@ -107,6 +109,7 @@ export const Request = () => {
           </div>
         </div>
       </div>
+
       <Navbar />
     </div>
   );
