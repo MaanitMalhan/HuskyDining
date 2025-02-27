@@ -57,6 +57,10 @@ const LinksContainer = () => {
       title: "about",
       href: "/about",
     },
+    {
+      title: "menu",
+      href: "/menu",
+    },
   ];
 
   return (

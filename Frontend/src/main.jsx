@@ -10,6 +10,7 @@ import { About } from "./Pages/About.jsx";
 import { Request } from "./Pages/Request";
 import { Login } from "./Pages/Login";
 import { Register } from "./Pages/Register";
+import { Menu } from "./Pages/Menu";
 import { Donate } from "./Pages/Donate.jsx";
 import { Home_loggedout } from "./Pages/Home.jsx";
 import { useSelector } from "react-redux";
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
         <Route path="/request" element={<Request />} />
+        <Route path="/menu" element={<Menu />} />
 
         {/* Private Route */}
         <Route path="" element={<PrivateRouteDashboard />}>
