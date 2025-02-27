@@ -5,8 +5,8 @@ import companyLogo from "../assets/Husky_Dining_logo.png";
 export const Home_loggedout = () => {
   const styles = {
     title: {
-        backgroundColor: "#c6c0b1",
-        color: "#496349",
+        backgroundColor: "#f3f5f3",
+        color: "#00007b",
         width: "100%",
         textAlign: "center",
         fontSize: "xx-large",
@@ -18,6 +18,7 @@ export const Home_loggedout = () => {
         justifyContent: "center",
         alignItems: "center",
         margin: "20px 0",
+        backgroundColor: "#dcd7cf",
     },
     logo: {
         width: "425px",  
@@ -52,7 +53,7 @@ export const Home_loggedout = () => {
 
 
     return (
-        <main className="overflow-hidden" style={{ backgroundColor: "rgb(220, 216, 207)", minHeight: "100vh" }}>
+        <main className="overflow-hidden" style={{ backgroundColor: "#f3f5f3", minHeight: "100vh" }}>
             <Navbar />
             <div className="home">
                 <h1 className="homeTitle" style={styles.title}>Welcome to HuskyDining!</h1>
