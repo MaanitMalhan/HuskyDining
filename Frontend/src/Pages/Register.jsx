@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Form, Button, Row, Col, Container, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "../slices/authApiSlice";
@@ -30,6 +28,11 @@ export const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    if (!email.endsWith("@uconn.edu")) {
+      toast.error("Only @uconn.edu email addresses are allowed.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
     } else {
@@ -42,59 +45,77 @@ export const Register = () => {
       }
     }
   };
+
   return (
-    <FormContainer>
-      <h1>Register</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group className="my-2" controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="name"
-            placeholder="Enter name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      padding: '10px'
+    }}>
+      <Card className="shadow-lg p-5 w-100" style={{ maxWidth: '600px', borderRadius: '20px', background: 'white' }}>
+        <h1 className="text-center mb-4" style={{ color: '#4a47a3' }}>Create Your Account</h1>
+        <p className="text-center text-muted mb-4">Join us and explore the best dining experiences!</p>
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="mb-3" controlId="name">
+            <Form.Label>Full Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              style={{ borderRadius: '10px' }}
+            />
+          </Form.Group>
 
-        <Form.Group className="my-2" controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter your @uconn.edu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{ borderRadius: '10px' }}
+            />
+          </Form.Group>
 
-        <Form.Group className="my-2" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group className="my-2" controlId="confirmPassword">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ borderRadius: '10px' }}
+            />
+          </Form.Group>
 
-        <Button type="submit" variant="primary" className="mt-3">
-          Register
-        </Button>
-      </Form>
+          <Form.Group className="mb-3" controlId="confirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              style={{ borderRadius: '10px' }}
+            />
+          </Form.Group>
 
-      <Row className="py-3">
-        <Col>
-          Already have an account? <Link to={`/login`}>Login</Link>
-        </Col>
-      </Row>
-    </FormContainer>
+          <Button type="submit" variant="primary" className="w-100 mb-3" disabled={isLoading} style={{ backgroundColor: '#8a86ff', border: 'none', borderRadius: '10px' }}>
+            {isLoading ? "Registering..." : "Register Now"}
+          </Button>
+        </Form>
+
+        <div className="text-center mt-3">
+          <p className="text-muted">Already have an account? <Link to={`/login`} className="text-primary" style={{ color: '#4a47a3' }}>Login here</Link></p>
+        </div>
+      </Card>
+    </div>
   );
 };
