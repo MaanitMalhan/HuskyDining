@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:8000"; // Replace with your backend URL
+const SOCKET_URL = "http://localhost:5173"; // Replace with your backend URL
 
 // Create and export the Socket.IO instance
 const socket = io(SOCKET_URL, {

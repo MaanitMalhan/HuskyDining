@@ -55,6 +55,7 @@ const importData = async () => {
     });
 
     await RequestFlex.insertMany(sampleRequest);
+    await RequestPoints.insertMany(sampleRequest);
     await Review.insertMany(sampleReview);
 
     console.log("Data Imported".green.inverse);
