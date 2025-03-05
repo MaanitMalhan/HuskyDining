@@ -7,7 +7,7 @@ export const requestApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getRequests: builder.query({
       query: (page) => ({
-        url: `${REQUEST_URL}/flex?page=${page}&limit=20`,
+        url: `${REQUEST_URL}/flex?page=${page}&limit=24`,
         method: "GET",
       }),
       keepUnusedDataFor: 5,

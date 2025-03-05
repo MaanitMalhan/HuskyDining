@@ -46,7 +46,7 @@ export const Card = ({ title, subtitle, className }) => {
               },
             }}
             className={twMerge(
-              "relative -m-0.5 flex h-72 flex-col justify-between overflow-hidden border-2 border-black bg-emerald-300 p-8",
+              "relative -m-0.5 flex h-52 flex-col justify-between overflow-hidden border-2 border-black bg-emerald-300 p-8",
               className
             )}
           >

@@ -1,117 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Container } from "react-bootstrap";
 import { Navbar } from "../components/navigation/Nav";
-import request from "../../../Backend/Data/dummyRequest";
 import { useSelector } from "react-redux";
 import { useGetRequestsQuery } from "../slices/requestApiSlice";
-
+import { Card } from "../components/Cards/Request";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiAlertCircle } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa";
 import { useCreateRequestMutation } from "../slices/requestApiSlice";
+import { toast } from "react-toastify";
 
 export const Request = () => {
   const [page, setPage] = useState(1);
-  const { data: requests = [], isFetching } = useGetRequestsQuery(page);
-  const [userID, setUserID] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("Point");
-  const [diningHallID, setDiningHallID] = useState("");
-
-  const [createRequest, { isLoading, isError, error }] = useCreateRequestMutation();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await createRequest({userID, diningHallID, amount, type}).unwrap();
-      console.log("Request created successfully:", response);
-
-      setRequestData(""); 
-      setNetid("");
-      setAmount("");
-      setType("");
-    } catch (err) {
-      console.error("Failed to create request:", err);
-    }
-  };
+  const { data: requests, isFetching } = useGetRequestsQuery(page);
+  const [isOpen, setIsOpen] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
 
   return (
-    <div
-      className="h-[100vh] flex items-center justify-center"
-      style={{
-        background: "linear-gradient(45deg, rgb(95, 20, 224), rgb(155, 105, 241))",
-      }}
-    >
-      <div className="relative w-[600px] h-[600px] bg-white rounded-[48px] shadow-xl">
-        <div className="absolute w-[calc(100%-4.1rem)] h-[calc(100%-4.1rem)] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          <div className="absolute h-[100%] w-[100%] top-0 left-0 flex flex-col justify-center px-10">
-            <h2 className="text-3xl font-semibold mb-6">Create a Request</h2>
-            <form 
-              onSubmit={handleSubmit} 
-              autoComplete="off" 
-              className="flex flex-col space-y-6"
-            >
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-full border-b border-gray-400 outline-none focus:border-black transition-all"
-                  value={userID}
-                  onChange={(e) => setUserID(e.target.value)}
-                  placeholder="Enter NetId"
-                />
-              </div>
-              
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-full border-b border-gray-400 outline-none focus:border-black transition-all"
-                  value={diningHallID}
-                  onChange={(e) => setDiningHallID(e.target.value)}
-                  placeholder="Enter Dining Hall ID"
-                />
-              </div>
-
-              <div className="flex space-x-4">
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-lg ${type === "Point" ? "bg-primary text-white" : "bg-gray-300"}`}
-                  onClick={() => setType("Point")}
-                >
-                  Points
-                </button>
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-lg ${type === "Flex" ? "bg-primary text-white" : "bg-gray-300"}`}
-                  onClick={() => setType("Flex")}
-                >
-                  Flex Passes
-                </button>
-              </div>
-
-              <div className="relative">
-                <input
-                  type="number"
-                  className="w-full border-b border-gray-400 outline-none focus:border-black transition-all"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="Enter Amount"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full h-[43px] bg-primary text-white rounded-lg cursor-pointer text-[.8rem]"
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating..." : "Create Request"}
-              </button>
-
-              {isError && (
-                <p className="text-red-500 text-center mt-3">Error: {error?.data?.message || "Failed to create request"}</p>
-              )}
-            </form>
-          </div>
-        </div>
-      </div>
-
+    <div className="">
       <Navbar />
+      <button
+        onClick={() => setIsOpen(true)}
+        className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium px-4 py-2 rounded hover:opacity-90 transition-opacity fixed left-7 top-4 w-20 h-20 flex justify-center items-center z-30"
+      >
+        <FaPlus size={32} />
+      </button>
+      <SpringModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        userID={userInfo._id}
+      />
       <div className="my-20"></div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-8">
@@ -125,5 +42,113 @@ export const Request = () => {
         ))}
       </div>
     </div>
+  );
+};
+
+const SpringModal = ({ isOpen, setIsOpen, userID }) => {
+  const [amount, setAmount] = useState("");
+  const [diningHallID, setDiningHall] = useState("");
+
+  const [create, { isLoading }] = useCreateRequestMutation();
+
+  const diningHalls = [
+    { id: "67c739b5dbbbc523ecba74ee", name: "Putnam" },
+    { id: "67c739b5dbbbc523ecba74ed", name: "Northwest" },
+    { id: "67c739b5dbbbc523ecba74ec", name: "North" },
+    { id: "67c739b5dbbbc523ecba74f0", name: "Whitney" },
+    { id: "67c739b5dbbbc523ecba74ea", name: "Towers" },
+    { id: "67c739b5dbbbc523ecba74eb", name: "McMahon" },
+    { id: "67c739b5dbbbc523ecba74e9", name: "Connecticut" },
+    { id: "67c739b5dbbbc523ecba74ef", name: "South" },
+  ];
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!amount || !diningHallID) {
+      alert("Please fill out all fields");
+      return;
+    }
+
+    try {
+      const res = await create({ userID, diningHallID, amount }).unwrap();
+      setIsOpen(false);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setIsOpen(false)}
+          className="bg-slate-900/20 backdrop-blur p-8 fixed inset-0 z-50 grid place-items-center overflow-y-scroll cursor-pointer"
+        >
+          <motion.div
+            initial={{ scale: 0, rotate: "12.5deg" }}
+            animate={{ scale: 1, rotate: "0deg" }}
+            exit={{ scale: 0, rotate: "0deg" }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gradient-to-br from-violet-600 to-indigo-600 text-white p-6 rounded-lg w-full max-w-lg shadow-xl cursor-default relative overflow-hidden"
+          >
+            <FiAlertCircle className="text-white/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24" />
+            <div className="relative z-10">
+              <div className="bg-white w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
+                <FiAlertCircle />
+              </div>
+              <h3 className="text-3xl font-bold text-center mb-2">
+                Dining Hall Flex Request
+              </h3>
+              <form onSubmit={submitHandler} className="space-y-4 mb-6">
+                <input
+                  type="number"
+                  step="1"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Amount"
+                  className="w-full p-2 rounded text-black"
+                  required
+                />
+                <select
+                  value={diningHallID}
+                  onChange={(e) => setDiningHall(e.target.value)}
+                  className="w-full p-2 rounded text-black"
+                  required
+                >
+                  <option value="">Select Dining Hall</option>
+                  {diningHalls.map((hall) => (
+                    <option key={hall.id} value={hall.id}>
+                      {hall.name}
+                    </option>
+                  ))}
+                </select>
+              </form>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  disabled={isLoading}
+                  className="bg-transparent hover:bg-white/10 transition-colors text-white font-semibold w-full py-2 rounded"
+                >
+                  Nah, go back
+                </button>
+                <button
+                  onClick={submitHandler}
+                  disabled={isLoading}
+                  className="bg-white hover:opacity-90 transition-opacity text-indigo-600 font-semibold w-full py-2 rounded"
+                >
+                  Create Request!
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
