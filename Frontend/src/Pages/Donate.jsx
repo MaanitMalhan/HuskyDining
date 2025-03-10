@@ -63,6 +63,8 @@ export const Donate = () => {
           />
           <input
             type="number"
+            min={1}
+            max={1000}
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
