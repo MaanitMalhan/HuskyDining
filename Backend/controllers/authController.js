@@ -14,12 +14,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password, token } = req.body;
 
   const user = await User.findOne({ email });
-
-  console.log(user)
-
-  const temp = await user.matchPasswords(password)
-
-  console.log(user)
+  
   // If user doesn't have 2FA then use this login flow
   if (!user.isMfaActive && user && (await user.matchPasswords(password))) {
     const accessToken = await generateToken(res, user._id);
