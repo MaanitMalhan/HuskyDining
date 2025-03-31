@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUserProfileQuery } from "../slices/authApiSlice";
+import { useGetUserProfileQuery, useGetBalanceQuery } from "../slices/authApiSlice";
 import { Navbar } from "../components/navigation/Nav";
 import { useSelector } from "react-redux";
 import "rsuite/dist/rsuite.min.css";
@@ -11,6 +11,8 @@ const { HeaderCell, Cell, Column } = Table;
 export const Account = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { data: profile, isLoading, isError, error } = useGetUserProfileQuery();
+  const { data: balance } = useGetBalanceQuery(profile.user.id);
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -30,15 +32,6 @@ export const Account = () => {
       fontWeight: "bold",
       padding: "20px 0",
     },
-    section: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      padding: "20px",
-      maxWidth: "800px",
-      margin: "0 auto",
-    },
     header: {
       fontSize: "24px",
       fontWeight: "bold",
@@ -48,20 +41,6 @@ export const Account = () => {
       fontSize: "18px",
       lineHeight: "1.6",
       color: "#333",
-    },
-    list: {
-      textAlign: "left",
-      listStyleType: "disc",
-      marginLeft: "20px",
-      fontSize: "18px",
-    },
-    transactionList: {
-      listStyle: "none",
-      padding: "0",
-    },
-    transactionItem: {
-      padding: "8px 0",
-      borderBottom: "1px solid #ddd",
     },
     panel: {
       padding: "20px",
@@ -87,16 +66,54 @@ export const Account = () => {
   };
   
   const mockTransactions = [
-    { id: 1, date: "2025-03-01", amount: "2", type: "Flex Passes", status: "Completed" },
-    { id: 2, date: "2025-03-05", amount: "100", type: "Points", status: "Pending" },
-    { id: 3, date: "2025-03-10", amount: "3", type: "Flex Passes", status: "Completed" },
-    { id: 4, date: "2025-03-01", amount: "2", type: "Flex Passes", status: "Completed" },
-    { id: 5, date: "2025-03-05", amount: "100", type: "Points", status: "Pending" },
-    { id: 6, date: "2025-03-10", amount: "3", type: "Flex Passes", status: "Completed" },
-    { id: 7, date: "2025-03-01", amount: "2", type: "Flex Passes", status: "Completed" },
-    { id: 8, date: "2025-03-05", amount: "100", type: "Points", status: "Pending" },
-    { id: 9, date: "2025-03-10", amount: "3", type: "Flex Passes", status: "Completed" },
+    { id: 1, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
+    { id: 2, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
+    { id: 3, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
+    { id: 4, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
+    { id: 5, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
+    { id: 6, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
+    { id: 7, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
+    { id: 8, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
+    { id: 9, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
   ];
+
+
+  const [sortColumn, setSortColumn] = React.useState();
+  const [sortType, setSortType] = React.useState();
+  const [loading, setLoading] = React.useState(false);
+
+
+  const getData = () => {
+    if (sortColumn && sortType) {
+      return mockTransactions.sort((a, b) => {
+        let x = a[sortColumn];
+        let y = b[sortColumn];
+        if (typeof x === 'string') {
+          x = x.charCodeAt();
+        }
+        if (typeof y === 'string') {
+          y = y.charCodeAt();
+        }
+        if (sortType === 'asc') {
+          return x - y;
+        } else {
+          return y - x;
+        }
+      });
+    }
+
+    return mockTransactions;
+  };
+
+  const handleSortColumn = (sortColumn, sortType) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSortColumn(sortColumn);
+      setSortType(sortType);
+    }, 500);
+  };
+
 
   return (
     <main style={{ backgroundColor: "#f3f5f3", minHeight: "100vh", padding: "20px" }}>
@@ -113,7 +130,7 @@ export const Account = () => {
       >
           <Panel header="Account Information" bordered>
             <p>{`Hello, ${userInfo.name}`}</p>
-            {profile ? (
+            {balance ? (
               <pre
                 style={{
                   backgroundColor: "#f5f5f5",
@@ -122,7 +139,8 @@ export const Account = () => {
                   overflowX: "auto"
                 }}
               >
-                {JSON.stringify(profile, null, 2)}
+              <p>{`Current Flexpasses: ${balance.flexpass}`}</p>
+              <p>{`Current Points: ${balance.points}`}</p>
               </pre>
             ) : (
               <p>No profile data available</p>
@@ -131,28 +149,35 @@ export const Account = () => {
         </PanelGroup>
 
         {/* Table with the same max width */}
-        <Table height={300} data={mockTransactions} bordered hover style={styles.table}>
+        <Table height={300} 
+            data= {getData()} 
+            bordered hover 
+            style={styles.table}
+            sortColumn={sortColumn}
+            onSortColumn={handleSortColumn}
+            sortType={sortType}
+            >
           <Column width={80} align="center">
             <HeaderCell>Id</HeaderCell>
             <Cell dataKey="id" />
           </Column>
-          <Column width={150}>
-            <HeaderCell>Date</HeaderCell>
+          <Column width={150} sortable>
+            <HeaderCell>Date</HeaderCell >
             <Cell dataKey="date" />
           </Column>
-          <Column width={120}>
+          <Column width={120} sortable>
             <HeaderCell>Amount</HeaderCell>
             <Cell dataKey="amount" />
           </Column>
-          <Column width={180}>
+          <Column width={180} sortable>
             <HeaderCell>Type</HeaderCell>
             <Cell dataKey="type" />
           </Column>
-          <Column width={150}>
+          <Column width={150} sortable>
             <HeaderCell>Status</HeaderCell>
             <Cell dataKey="status" />
           </Column>
-          <Column width={100}>
+          <Column width={100} sortable>
             <HeaderCell>Action</HeaderCell>
             <Cell>
               {(rowData) => (
