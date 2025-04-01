@@ -5,6 +5,7 @@ import qrCode from "qrcode";
 import { redis } from "../config/redis.js";
 import jwt from "jsonwebtoken";
 import speakeasy from "speakeasy";
+import { log } from "console";
 
 // @desc Auth user/set token
 // route POST /api/auth/login
@@ -13,10 +14,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password, token } = req.body;
 
   const user = await User.findOne({ email });
-
+  
   // If user doesn't have 2FA then use this login flow
   if (!user.isMfaActive && user && (await user.matchPasswords(password))) {
     const accessToken = await generateToken(res, user._id);
+    
     res.status(201).json({
       _id: user._id,
       name: user.name,
