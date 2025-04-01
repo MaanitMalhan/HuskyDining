@@ -1,7 +1,7 @@
 import express from "express";
-import dummyDiningHalls from "../data/dummyDiningHall.js";
 import dummyReviews from "../data/dummyReviews.js";
 import dummyUsers from "../data/dummyUsers.js";
+import dummyDiningHalls from "../data/dummyDiningHall.js";
 
 const router = express.Router();
 
@@ -23,15 +23,11 @@ router.get("/hours", (req, res) => {
   }
 });
 
-// Get today's specials
 router.get("/specials", (req, res) => {
   try {
-    // Simulate specials by getting some menu items from dining halls
     const specials = dummyDiningHalls.flatMap(hall => {
-      // Handle halls that might not have a menu
       if (!Array.isArray(hall.menu)) return [];
       
-      // Get up to 2 random items from each hall's menu
       const hallSpecials = hall.menu
         .sort(() => 0.5 - Math.random())
         .slice(0, 2)
