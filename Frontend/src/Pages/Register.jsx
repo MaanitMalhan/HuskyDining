@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form, Button, Row, Col, Container, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
@@ -18,7 +19,7 @@ export const Register = () => {
   const [register, { isLoading }] = useRegisterMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
-
+  
   useEffect(() => {
     if (userInfo) {
       navigate("/");
@@ -55,6 +56,7 @@ export const Register = () => {
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       padding: '10px'
     }}>
+      <Navbar />
       <Card className="shadow-lg p-5 w-100" style={{ maxWidth: '600px', borderRadius: '20px', background: 'white' }}>
         <h1 className="text-center mb-4" style={{ color: '#4a47a3' }}>Create Your Account</h1>
         <p className="text-center text-muted mb-4">Join us and explore the best dining experiences!</p>

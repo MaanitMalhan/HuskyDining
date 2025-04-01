@@ -1,6 +1,6 @@
 import React from "react";
 import { useGetUserProfileQuery } from "../slices/authApiSlice";
-import { Navbar } from "../components/navigation/Nav";
+import { Navbar } from "../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 

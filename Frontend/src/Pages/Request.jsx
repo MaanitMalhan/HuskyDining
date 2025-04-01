@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navbar } from "../components/navigation/Nav";
+import { Navbar } from "../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
 import { useGetRequestsQuery } from "../slices/requestApiSlice";
 import { Card } from "../components/Cards/Request";
@@ -19,11 +19,11 @@ export const Request = () => {
     <div className="">
       <Navbar />
       <button
-        onClick={() => setIsOpen(true)}
-        className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium px-4 py-2 rounded hover:opacity-90 transition-opacity fixed left-7 top-4 w-20 h-20 flex justify-center items-center z-30"
-      >
-        <FaPlus size={32} />
-      </button>
+      onClick={() => setIsOpen(true)}
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold px-6 py-4 rounded-xl hover:opacity-90 transition-all text-lg z-30 shadow-lg"
+    >
+      Click to Request
+    </button>
       <SpringModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
