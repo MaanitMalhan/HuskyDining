@@ -1,26 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useGetUserProfileQuery, useGetBalanceQuery } from "../slices/authApiSlice";
 import { Navbar } from "../components/navigation/Nav";
 import { useSelector } from "react-redux";
+import { useGetRequestsQuery } from "../slices/requestApiSlice";
 import "rsuite/dist/rsuite.min.css";
 // import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Panel, PanelGroup, Table, Button, Placeholder } from "rsuite";
+import { getDate } from "rsuite/esm/internals/utils/date";
 
 const { HeaderCell, Cell, Column } = Table;
 
 export const Account = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const { data: profile, isLoading, isError, error } = useGetUserProfileQuery();
-  const { data: balance } = useGetBalanceQuery(profile.user.id);
-
-
-  if (isLoading) {
+  const [page, setPage] = useState(1);
+  const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error: profileError } = useGetUserProfileQuery();
+  const {data: balance, isLoading: isBalanceLoading, isError: isBalanceError, error:balanceError} = useGetBalanceQuery(userInfo._id);
+  const { data: requests, isFetching } = useGetRequestsQuery(page);
+  
+  if (isProfileLoading || isBalanceLoading) {
     return <div>Loading...</div>;
   }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
+  
+  if (isProfileError) {
+    return <div>Error fetching profile: {profileError?.message || "Unknown error"}</div>;
   }
+  
+  if (isBalanceError) {
+    return <div>Error fetching balance: {balanceError?.message || "Unknown error"}</div>;
+  }
+
+  console.log(userInfo._id);
 
   const styles = {
     title: {
@@ -76,43 +85,49 @@ export const Account = () => {
     { id: 8, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
     { id: 9, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
   ];
+ 
+  const userRequest = requests?.filter((req) => req.userID === userInfo._id)
+  // .filter((req) => req.status === "fullfilled")
+
+  console.log(userRequest)
 
 
-  const [sortColumn, setSortColumn] = React.useState();
-  const [sortType, setSortType] = React.useState();
-  const [loading, setLoading] = React.useState(false);
+
+  // const [sortColumn, setSortColumn] = React.useState();
+  // const [sortType, setSortType] = React.useState();
+  // const [loading, setLoading] = React.useState(false);
 
 
-  const getData = () => {
-    if (sortColumn && sortType) {
-      return mockTransactions.sort((a, b) => {
-        let x = a[sortColumn];
-        let y = b[sortColumn];
-        if (typeof x === 'string') {
-          x = x.charCodeAt();
-        }
-        if (typeof y === 'string') {
-          y = y.charCodeAt();
-        }
-        if (sortType === 'asc') {
-          return x - y;
-        } else {
-          return y - x;
-        }
-      });
-    }
+  // const getData = () => {
+  //   if (sortColumn && sortType) {
+  //     return [...mockTransactions].sort((a, b) => {
+  //       let x = a[sortColumn];
+  //       let y = b[sortColumn];
+  //       if (typeof x === 'string') {
+  //         x = x.charCodeAt();
+  //       }
+  //       if (typeof y === 'string') {
+  //         y = y.charCodeAt();
+  //       }
+  //       if (sortType === 'asc') {
+  //         return x - y;
+  //       } else {
+  //         return y - x;
+  //       }
+  //     });
+  //   }
 
-    return mockTransactions;
-  };
+  //   return mockTransactions;
+  // };
 
-  const handleSortColumn = (sortColumn, sortType) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSortColumn(sortColumn);
-      setSortType(sortType);
-    }, 500);
-  };
+  // const handleSortColumn = (sortColumn, sortType) => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     setSortColumn(sortColumn);
+  //     setSortType(sortType);
+  //   }, 500);
+  // };
 
 
   return (
@@ -124,38 +139,35 @@ export const Account = () => {
 
       {/* Centered container with max width for consistency */}
       <div style={{ maxWidth: "800px", margin: "auto" }}>
-      <PanelGroup
-        direction="horizontal"
-        style={styles.panel}
-      >
-          <Panel header="Account Information" bordered>
-            <p>{`Hello, ${userInfo.name}`}</p>
-            {balance ? (
-              <pre
-                style={{
-                  backgroundColor: "#f5f5f5",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  overflowX: "auto"
-                }}
-              >
-              <p>{`Current Flexpasses: ${balance.flexpass}`}</p>
-              <p>{`Current Points: ${balance.points}`}</p>
-              </pre>
-            ) : (
-              <p>No profile data available</p>
-            )}
-          </Panel>
-        </PanelGroup>
-
+      <h3>Account Information</h3>
+        <Panel bordered style={styles.panel}> 
+          <p>{`Hello, ${userInfo.name}`}</p>
+          {balance ? (
+            <pre
+              style={{
+                backgroundColor: "#f5f5f5",
+                padding: "10px",
+                borderRadius: "5px",
+                overflowX: "auto"
+              }}
+            >
+            <p>{`Current Flexpasses: ${balance.flexpass}`}</p>
+            <p>{`Current Points: ${balance.points}`}</p>
+            </pre>
+          ) : (
+            <p>No profile data available</p>
+          )}
+        </Panel>
         {/* Table with the same max width */}
-        <Table height={300} 
-            data= {getData()} 
+        <h3>Transactions</h3>
+        {/* <Table height={300} 
+            data= {mockTransactions}
+            // data = {getData()} 
             bordered hover 
             style={styles.table}
-            sortColumn={sortColumn}
-            onSortColumn={handleSortColumn}
-            sortType={sortType}
+            // sortColumn={sortColumn}
+            // onSortColumn={handleSortColumn}
+            // sortType={sortType}
             >
           <Column width={80} align="center">
             <HeaderCell>Id</HeaderCell>
@@ -177,7 +189,7 @@ export const Account = () => {
             <HeaderCell>Status</HeaderCell>
             <Cell dataKey="status" />
           </Column>
-          <Column width={100} sortable>
+          <Column width={100}>
             <HeaderCell>Action</HeaderCell>
             <Cell>
               {(rowData) => (
@@ -187,79 +199,28 @@ export const Account = () => {
               )}
             </Cell>
           </Column>
+        </Table > */}
+
+        <Table 
+          height={400} 
+          data={userRequest} 
+          bordered hover 
+          style = {styles.table}>
+          <Column width={200} align="center">
+            <HeaderCell>Created At</HeaderCell>
+            <Cell dataKey="createdAt" />
+          </Column>
+          <Column width={40} align="center">
+            <HeaderCell>Amount</HeaderCell>
+            <Cell dataKey="amount" />
+          </Column>
+          <Column width={250} align="center">
+            <HeaderCell>diningHallID</HeaderCell>
+            <Cell dataKey="diningHallID" />
+          </Column>
+
         </Table>
       </div>
-    </main>
-  );
-
-
-
-  return (
-    <main style={{ backgroundColor: "#f3f5f3", minHeight: "100vh" }}>
-      <Navbar />
-      <h1 style={styles.title}>User Dashboard</h1>
-
-      <PanelGroup direction= "horizontal">
-        {/* user info */}
-        <Panel defaultSize={50} style={styles.panel}>
-          <h2 className={`text-2xl font-semibold`}>Account Information</h2>
-          <p>{`Hello, ${userInfo.name}`}</p>
-          {profile ? (
-            <pre style={styles.pre}>{JSON.stringify(profile, null, 2)}</pre>
-          ) : (
-            <p>No profile data available.</p>
-          )}
-        </Panel>
-
-        {/* trasnactions panel */}
-        <Panel defaultSize={50} style={styles.panel}>
-          
-          <h2 className={`text-2xl font-semibold`}>Previous transactions</h2>
-          <ul style={styles.transactionList}>
-            {mockTransactions.map((tx) =>(
-            <li key={tx.id} style={styles.transactionItem}>
-              <strong>{tx.date}</strong> - {tx.amount} - <em>{tx.type}</em> - <em>{tx.status}</em>
-            </li>
-            ))}
-          </ul>
-        </Panel>
-      </PanelGroup>
-
-      {/* <Table height={400} data={mockTransactions} autoHeight>
-        <Column width={100} align="center">
-          <HeaderCell>Id</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
-        <Column width={200}>
-          <HeaderCell>Date</HeaderCell>
-          <Cell dataKey="date" />
-        </Column>
-        <Column width={200}>
-          <HeaderCell>Amount</HeaderCell>
-          <Cell dataKey="amount" />
-        </Column>
-        <Column width={200}>
-          <HeaderCell>Type</HeaderCell>
-          <Cell dataKey="type" />
-        </Column>
-        <Column width={200}>
-          <HeaderCell>Status</HeaderCell>
-          <Cell dataKey="status" />
-        </Column>
-      </Table>
-   */}
-  
-
-      {/* <h1>Account</h1>
-      <p>{`Hello ${userInfo.name}`}</p>
-      <div>
-        <h2>Profile</h2>
-        {profile ? (
-          <pre>{JSON.stringify(profile, null, 2)}</pre>
-        ) : (
-          <p>No profile data available.</p>
-        )}
-      </div> */}
     </main>
   );
 };
