@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navbar } from "../components/navigation/Nav";
+import { Navbar } from "../components/Navbar/Navbar";
 import axios from "axios";
 
 export const Donate = () => {
