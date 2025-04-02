@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { Navbar } from "../components/Navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/authApiSlice";
@@ -43,12 +44,13 @@ export const Login = () => {
 
   return (
     <div
-      className="bg-projblack h-[100vh] flex items-center justify-center"
+      className="bg-projblack min-h-screen pt-24 flex items-center justify-center"
       style={{
         background:
           "linear-gradient(45deg, rgb(95, 20, 224), rgb(155, 105, 241))",
       }}
     >
+    <Navbar />
       <div className="relative w-[1020px] h-[640px] bg-white rounded-[48px] shadow-xl">
         <div className="absolute w-[calc(100%-4.1rem)] h-[calc(100%-4.1rem)] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="absolute h-[100%] w-[45%] top-0 left-0">

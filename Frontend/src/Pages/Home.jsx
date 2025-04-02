@@ -1,5 +1,6 @@
 import React from "react";
-import { Navbar } from "../components/navigation/Nav";
+// import { Navbar } from "../components/navigation/Nav";
+import { Navbar } from "../components/Navbar/Navbar";
 import companyLogo from "../assets/Husky_Dining_logo.png";
 
 export const Home_loggedout = () => {
@@ -56,7 +57,7 @@ export const Home_loggedout = () => {
         <main className="overflow-hidden" style={{ backgroundColor: "#f3f5f3", minHeight: "100vh" }}>
             <Navbar />
             <div className="home">
-                <h1 className="homeTitle" style={styles.title}>Welcome to HuskyDining!</h1>
+                
 
                 <div className="logoContainer" style={styles.logoContainer}>
                     <img src={companyLogo} style={styles.logo} alt="HuskyDining Logo" className="logo-image" />

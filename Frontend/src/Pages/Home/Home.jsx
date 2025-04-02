@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu } from "../../components/Home/Menu";
 import { Balance } from "../../components/Home/Balance";
 import { Transactions } from "../../components/Home/Transactions";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "../components/Navbar/Navbar";
 import { Review } from "../../components/Home/Reviews";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
