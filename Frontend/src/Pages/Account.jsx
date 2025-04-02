@@ -1,6 +1,6 @@
-import React from "react";
-import { useGetUserProfileQuery } from "../slices/authApiSlice";
-import { Navbar } from "../components/Navbar/Navbar";
+import React, { useState, useEffect } from "react";
+import { useGetUserProfileQuery, useGetBalanceQuery } from "../slices/authApiSlice";
+import { Navbar } from "../components/navigation/Nav";
 import { useSelector } from "react-redux";
 import { useGetRequestsQuery } from "../slices/requestApiSlice";
 import "rsuite/dist/rsuite.min.css";
