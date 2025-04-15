@@ -62,28 +62,31 @@ const getUserRequestPoints = asyncHandler(async (req, res) => {
 // @route POST /api/request
 // @access Public
 const createRequest = asyncHandler(async (req, res) => {
-  const { userID, diningHallID, amount } = req.body;
+  const { userID, diningHallID, amount, type } = req.body;
 
-  const newRequest = await RequestFlex.create({
-    userID,
-    diningHallID,
-    amount,
-  });
-
-  if (newRequest) {
-    // Emit the new request to all connected clients
-    // req.io.emit("newRequest", newRequest);
-
-    res.status(201).json(newRequest);
+  if (type === "points") {
+    const newPointsRequest = await RequestPoints.create({
+      userID,
+      diningHallID,
+      amount,
+    });
+    res.status(201).json(newPointsRequest);
+  } else if (type === "flex") {
+    const newFlexRequest = await RequestFlex.create({
+      userID,
+      diningHallID,
+      amount,
+    });
+    res.status(201).json(newFlexRequest);
   } else {
-    res.status(500).json({ message: "Failed to create the request" });
+    res.status(400).json({ message: "Invalid request type" });
   }
 });
 
 export {
   getRequest,
   getUserRequest,
-  createRequest,
+  createRequest,           
   getRequestPoints,
   getUserRequestPoints,
 };

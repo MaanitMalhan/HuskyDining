@@ -11,36 +11,27 @@ export const requestApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       keepUnusedDataFor: 5,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
-      },
-      // Always merge incoming data to the cache entry
+      serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems) => {
         currentCache.push(...newItems);
       },
-      // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-      // // Integrate WebSocket updates
-      // async onCacheEntryAdded(arg, { updateCachedData, cacheEntryRemoved }) {
-      //   try {
-
-      //     // Listen for real-time updates
-      //     socket.on("newRequest", (newRequest) => {
-      //       updateCachedData((draft) => {
-      //         draft.push(newRequest); // Add the new request to the cache
-      //       });
-      //     });
-
-      //     // Wait until the cache entry is removed (cleanup)
-      //     await cacheEntryRemoved;
-      //   } catch (error) {
-      //     console.error("Socket error:", error);
-      //   } finally {
-      //     socket.off("newRequest");
-      //   }
-      // },
+    }),
+    getRequestPoints: builder.query({
+      query: (page) => ({
+        url: `${REQUEST_URL}/points?page=${page}&limit=120`,
+        method: "GET",
+      }),
+      keepUnusedDataFor: 5,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
     }),
     getUserRequests: builder.query({
       query: (userID) => ({
@@ -61,6 +52,7 @@ export const requestApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetRequestsQuery,
+  useGetRequestPointsQuery,
   useGetUserRequestsQuery,
   useCreateRequestMutation,
 } = requestApiSlice;
