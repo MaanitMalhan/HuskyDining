@@ -98,7 +98,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
       throw new Error("Sender not found");
     }
 
-    if (sender.flexpass < 0) {
+    if (sender.points < 0) {
       throw new Error("Sender has insufficient flexpass");
     }
 
@@ -133,7 +133,59 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
 // route GET /api/transaction/donate
 // @access Private
 const donateTransaction = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "donate" });
+  const { fromUserId, toUserId, amount } = req.body;
+
+  if (!fromUserId || !toUserId || !amount) {
+    res.status(400);
+    throw new Error(
+      "Please provide all required fields: fromUserId, toUserId, amount"
+    );
+  }
+
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    // Subtract donation amount from sender
+    const sender = await User.findByIdAndUpdate(
+      fromUserId,
+      { $inc: { balance: -amount } },
+      { new: true, session }
+    );
+
+    if (!sender) {
+      throw new Error("Sender not found");
+    }
+
+    if (sender.balance < 0) {
+      throw new Error("Sender has insufficient balance");
+    }
+
+    // Add donation amount to recipient
+    const recipient = await User.findByIdAndUpdate(
+      toUserId,
+      { $inc: { balance: amount } },
+      { new: true, session }
+    );
+
+    if (!recipient) {
+      throw new Error("Recipient not found");
+    }
+
+    // Commit the transaction if both updates succeed
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({
+      message: "Donation successful",
+    });
+  } catch (error) {
+    // Rollback transaction in case of any error
+    await session.abortTransaction();
+    session.endSession();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
 
 export { requestFlexTransaction, requestPointsTransaction, donateTransaction };
