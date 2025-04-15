@@ -98,7 +98,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
       throw new Error("Sender not found");
     }
 
-    if (sender.flexpass < 0) {
+    if (sender.points < 0) {
       throw new Error("Sender has insufficient flexpass");
     }
 

@@ -19,31 +19,16 @@ export const Card = ({ title, subtitle, className }) => {
         )}
       >
         <motion.div
-          initial={{
-            x: 0,
-            y: 0,
-          }}
+          initial={{ x: 0, y: 0 }}
           variants={{
-            hovered: {
-              x: -5,
-              y: -5,
-            },
+            hovered: { x: -5, y: -5 },
           }}
-          className={twMerge(
-            "-m-0.5 border-2 border-black bg-emerald-300",
-            className
-          )}
+          className={twMerge("-m-0.5 border-2 border-black bg-emerald-300", className)}
         >
           <motion.div
-            initial={{
-              x: 0,
-              y: 0,
-            }}
+            initial={{ x: 0, y: 0 }}
             variants={{
-              hovered: {
-                x: -5,
-                y: -5,
-              },
+              hovered: { x: -5, y: -5 },
             }}
             className={twMerge(
               "relative -m-0.5 flex h-52 flex-col justify-between overflow-hidden border-2 border-black bg-emerald-300 p-8",
@@ -56,7 +41,7 @@ export const Card = ({ title, subtitle, className }) => {
             </p>
             <div>
               <p className="transition-[margin] duration-300 ease-in-out group-hover:mb-10 text-2xl font-medium">
-                Could you donate {subtitle} flex pass?
+                {subtitle}
               </p>
               <button className="absolute bottom-2 left-2 right-2 translate-y-full border-2 border-black bg-white px-4 py-2 text-black opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
                 DONATE

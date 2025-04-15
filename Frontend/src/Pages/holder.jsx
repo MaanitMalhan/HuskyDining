@@ -12,14 +12,14 @@ import { FiAlertCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export const Request = () => {
-  const [page, setPage] = useState(1);
-  const { data: requests, isFetching } = useGetRequestsQuery(page);
+  const [page] = useState(1);
+  const { data: requests } = useGetRequestsQuery(page);
   const { data: pointRequests } = useGetRequestPointsQuery(page);
   const [isOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
 
   return (
-    <div className="">
+    <div>
       <Navbar />
       <button
         onClick={() => setIsOpen(true)}
@@ -27,33 +27,45 @@ export const Request = () => {
       >
         Click to Request
       </button>
-      <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} userID={userInfo._id} />
-      <div className="my-20"></div>
+      <SpringModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        userID={userInfo._id}
+      />
+      <div className="my-20" />
 
       <div className="p-8 space-y-12">
         <div>
           <h2 className="text-2xl font-bold text-indigo-700 mb-4">Flex Requests</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {requests?.map((req) => (
-              <Card
-              key={req._id}
-              title={req.priority || "Flex"}
-              subtitle={`Could you donate ${req.amount} Flex Pass${req.amount > 1 ? "es" : ""}?`}
-            />
-            ))}
+            {requests?.length > 0 ? (
+              requests.map((req) => (
+                <Card
+                  key={req._id}
+                  title="Flex Request"
+                  subtitle={`${req.amount} Flex Passes`}
+                />
+              ))
+            ) : (
+              <p className="text-white">No Flex Requests</p>
+            )}
           </div>
         </div>
 
         <div>
           <h2 className="text-2xl font-bold text-indigo-700 mb-4">Points Requests</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {pointRequests?.map((req) => (
-              <Card
-              key={req._id}
-              title={req.priority || "Points"}
-              subtitle={`Could you donate ${req.amount} Point${req.amount > 1 ? "s" : ""}?`}
-            />
-            ))}
+            {pointRequests?.length > 0 ? (
+              pointRequests.map((req) => (
+                <Card
+                  key={req._id}
+                  title="Points Request"
+                  subtitle={`${req.amount} Points`}
+                />
+              ))
+            ) : (
+              <p className="text-white">No Points Requests</p>
+            )}
           </div>
         </div>
       </div>
@@ -80,13 +92,9 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!amount || !diningHallID) {
-      alert("Please fill out all fields");
-      return;
-    }
-
+    if (!amount || !diningHallID) return alert("Please fill out all fields");
     try {
-      const res = await create({ userID, diningHallID, amount, type }).unwrap();
+      await create({ userID, diningHallID, amount, type }).unwrap();
       setIsOpen(false);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
@@ -141,7 +149,7 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
                 </button>
               </div>
               <h3 className="text-3xl font-bold text-center mb-2">
-                Dining Hall {type === "flex" ? "Flex Pass" : "Points"} Request
+                Dining Hall {type === "flex" ? "Flex" : "Points"} Request
               </h3>
               <form onSubmit={submitHandler} className="space-y-4 mb-6">
                 <input
