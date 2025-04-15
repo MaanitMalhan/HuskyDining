@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
-import { useGetRequestsQuery } from "../slices/requestApiSlice";
+import {
+  useGetRequestsQuery,
+  useGetRequestPointsQuery,
+  useCreateRequestMutation,
+} from "../slices/requestApiSlice";
 import { Card } from "../components/Cards/Request";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiAlertCircle } from "react-icons/fi";
-import { FaPlus } from "react-icons/fa";
-import { useCreateRequestMutation } from "../slices/requestApiSlice";
 import { toast } from "react-toastify";
 
 export const Request = () => {
   const [page, setPage] = useState(1);
   const { data: requests, isFetching } = useGetRequestsQuery(page);
+  const { data: pointRequests } = useGetRequestPointsQuery(page);
   const [isOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -19,27 +22,40 @@ export const Request = () => {
     <div className="">
       <Navbar />
       <button
-      onClick={() => setIsOpen(true)}
-      className="fixed bottom-5 right-5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold px-6 py-4 rounded-xl hover:opacity-90 transition-all text-lg z-30 shadow-lg"
-    >
-      Click to Request
-    </button>
-      <SpringModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        userID={userInfo._id}
-      />
+        onClick={() => setIsOpen(true)}
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold px-6 py-4 rounded-xl hover:opacity-90 transition-all text-lg z-30 shadow-lg"
+      >
+        Click to Request
+      </button>
+      <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} userID={userInfo._id} />
       <div className="my-20"></div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-8">
-        {requests?.map((req) => (
-          <Card
-            key={req._id}
-            className=""
-            title={req.priority}
-            subtitle={req.amount}
-          ></Card>
-        ))}
+      <div className="p-8 space-y-12">
+        <div>
+          <h2 className="text-2xl font-bold text-indigo-700 mb-4">Flex Requests</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {requests?.map((req) => (
+              <Card
+              key={req._id}
+              title={req.priority || "Flex"}
+              subtitle={`Could you donate ${req.amount} Flex Pass${req.amount > 1 ? "es" : ""}?`}
+            />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold text-indigo-700 mb-4">Points Requests</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {pointRequests?.map((req) => (
+              <Card
+              key={req._id}
+              title={req.priority || "Points"}
+              subtitle={`Could you donate ${req.amount} Point${req.amount > 1 ? "s" : ""}?`}
+            />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -48,7 +64,7 @@ export const Request = () => {
 const SpringModal = ({ isOpen, setIsOpen, userID }) => {
   const [amount, setAmount] = useState("");
   const [diningHallID, setDiningHall] = useState("");
-
+  const [type, setType] = useState("flex");
   const [create, { isLoading }] = useCreateRequestMutation();
 
   const diningHalls = [
@@ -64,15 +80,13 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    // Basic validation
     if (!amount || !diningHallID) {
       alert("Please fill out all fields");
       return;
     }
 
     try {
-      const res = await create({ userID, diningHallID, amount }).unwrap();
+      const res = await create({ userID, diningHallID, amount, type }).unwrap();
       setIsOpen(false);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
@@ -102,8 +116,32 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
               <div className="bg-white w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
                 <FiAlertCircle />
               </div>
+              <div className="flex justify-center gap-4 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setType("flex")}
+                  className={`px-4 py-2 rounded-lg font-semibold ${
+                    type === "flex"
+                      ? "bg-white text-indigo-600"
+                      : "bg-white/10 text-white border border-white"
+                  }`}
+                >
+                  Request Flex
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setType("points")}
+                  className={`px-4 py-2 rounded-lg font-semibold ${
+                    type === "points"
+                      ? "bg-white text-indigo-600"
+                      : "bg-white/10 text-white border border-white"
+                  }`}
+                >
+                  Request Points
+                </button>
+              </div>
               <h3 className="text-3xl font-bold text-center mb-2">
-                Dining Hall Flex Request
+                Dining Hall {type === "flex" ? "Flex Pass" : "Points"} Request
               </h3>
               <form onSubmit={submitHandler} className="space-y-4 mb-6">
                 <input
