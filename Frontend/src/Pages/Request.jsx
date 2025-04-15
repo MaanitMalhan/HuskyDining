@@ -86,7 +86,9 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
     }
 
     try {
-      const res = await create({ userID, diningHallID, amount, type }).unwrap();
+      const res = await create({ userID, diningHallID, amount }).unwrap();
+      toast.success("Request submitted successfully!");
+
       setIsOpen(false);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
