@@ -7,6 +7,8 @@ import "rsuite/dist/rsuite.min.css";
 // import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Panel, PanelGroup, Table, Button, Placeholder } from "rsuite";
 import { getDate } from "rsuite/esm/internals/utils/date";
+import { useGetUserLedgerTransactionsQuery} from "../slices/ledgerSlice";
+import { ConsoleLogEntry } from "selenium-webdriver/bidi/logEntries";
 
 const { HeaderCell, Cell, Column } = Table;
 
@@ -14,14 +16,15 @@ export const Account = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [page, setPage] = useState(1);
   const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error: profileError } = useGetUserProfileQuery();
+  const { data: ledger, isLoading: isLedgerLoading, isError: isLedgerError, error:LedgerError} = useGetUserLedgerTransactionsQuery(userInfo._id);
   const {data: balance, isLoading: isBalanceLoading, isError: isBalanceError, error:balanceError} = useGetBalanceQuery(userInfo._id);
-  const { data: requests, isFetching } = useGetRequestsQuery(page);
+  // const { data: requests,isLoading: isRequestLoading, isError: isRequestError, error:RequestError } = useGetRequestsQuery(page);
   
-  if (isProfileLoading || isBalanceLoading) {
+  if (isProfileLoading || isBalanceLoading || isLedgerLoading ) {
     return <div>Loading...</div>;
   }
   
-  if (isProfileError) {
+  if (isProfileError ) {
     return <div>Error fetching profile: {profileError?.message || "Unknown error"}</div>;
   }
   
@@ -29,7 +32,14 @@ export const Account = () => {
     return <div>Error fetching balance: {balanceError?.message || "Unknown error"}</div>;
   }
 
+  if (isLedgerError) {
+    return <div>Error fetching ledger: {balanceError?.message || "Unknown error"}</div>;
+  }
+
   console.log(userInfo._id);
+
+  console.log(ledger);
+
 
   const styles = {
     title: {
@@ -86,10 +96,10 @@ export const Account = () => {
     { id: 9, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
   ];
  
-  const userRequest = requests?.filter((req) => req.userID === userInfo._id)
+  // const userRequest = requests?.filter((req) => req.userID === userInfo._id)
   // .filter((req) => req.status === "fullfilled")
 
-  console.log(userRequest)
+  // console.log(userRequest)
 
 
 
@@ -203,20 +213,24 @@ export const Account = () => {
 
         <Table 
           height={400} 
-          data={userRequest} 
+          data={ledger} 
           bordered hover 
           style = {styles.table}>
           <Column width={200} align="center">
-            <HeaderCell>Created At</HeaderCell>
+            <HeaderCell>Processed At</HeaderCell>
             <Cell dataKey="createdAt" />
+          </Column>
+          <Column width={250} align="center">
+            <HeaderCell>Recipient</HeaderCell>
+            <Cell dataKey="recipient_name" />
           </Column>
           <Column width={40} align="center">
             <HeaderCell>Amount</HeaderCell>
             <Cell dataKey="amount" />
           </Column>
           <Column width={250} align="center">
-            <HeaderCell>diningHallID</HeaderCell>
-            <Cell dataKey="diningHallID" />
+            <HeaderCell>Type</HeaderCell>
+            <Cell dataKey="type" />
           </Column>
 
         </Table>

@@ -1,7 +1,7 @@
 import express from "express";
-import dummyReviews from "../data/dummyReviews.js";
-import dummyUsers from "../data/dummyUsers.js";
-import dummyDiningHalls from "../data/dummyDiningHall.js";
+import dummyReviews from "../Data/dummyReviews.js";
+import dummyUsers from "../Data/dummyUsers.js";
+import dummyDiningHalls from "../Data/dummyDiningHall.js";
 
 const router = express.Router();
 
