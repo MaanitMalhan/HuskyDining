@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import RequestFlex from "../models/requestFlexModel.js";
+import Ledger from "../models/ledgerModel.js";
 import mongoose from "mongoose";
 
 // @desc User Request Flex Transaction
@@ -53,6 +54,17 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
     if (!recipient) {
       throw new Error("Recipient not found");
     }
+
+    const recipientUser = await User.findById(toUserId);
+
+    // Add ledger entry
+    await Ledger.create({
+      userID: fromUserId,
+      recipientID: toUserId,
+      recipient_name: recipientUser.name,
+      amount: flexPassCount,
+      type: "Flex",
+    });
 
     // Commit the transaction if both updates succeed
     await session.commitTransaction();
@@ -113,6 +125,16 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
       throw new Error("Recipient not found");
     }
 
+    const recipientUser = await User.findById(toUserId);
+
+    await Ledger.create({
+      userID: fromUserId,
+      recipientID: toUserId,
+      recipient_name: recipientUser.name,
+      amount: pointsCount,
+      type: "Points",
+    });
+
     // Commit the transaction if both updates succeed
     await session.commitTransaction();
     session.endSession();
@@ -171,6 +193,16 @@ const donateTransaction = asyncHandler(async (req, res) => {
     if (!recipient) {
       throw new Error("Recipient not found");
     }
+
+    const recipientUser = await User.findById(toUserId);
+
+    await Ledger.create({
+      userID: fromUserId,
+      recipientID: toUserId,
+      recipient_name: recipientUser.name,
+      amount: amount,
+      type: "Donate",
+    });
 
     // Commit the transaction if both updates succeed
     await session.commitTransaction();
