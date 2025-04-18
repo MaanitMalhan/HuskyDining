@@ -64,6 +64,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
       recipient_name: recipientUser.name,
       amount: flexPassCount,
       type: "Flex",
+      transaction: "request"
     });
 
     // Commit the transaction if both updates succeed
@@ -133,6 +134,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
       recipient_name: recipientUser.name,
       amount: pointsCount,
       type: "Points",
+      transaction: "request"
     });
 
     // Commit the transaction if both updates succeed
@@ -168,8 +170,6 @@ const donateTransaction = asyncHandler(async (req, res) => {
   const fromUser = await User.findOne({ email: fromEmail });
   const toUser = await User.findOne({ email: toEmail });
 
-  console.log(req.body);
-
   if (!fromUser || !toUser) {
     res.status(404);
     throw new Error("One or both users not found");
@@ -178,8 +178,6 @@ const donateTransaction = asyncHandler(async (req, res) => {
   const fromUserId = fromUser._id;
   const toUserId = toUser._id;
 
-  console.log(fromUserId);
-  console.log(toUserId);
 
   const session = await mongoose.startSession();
   try {
@@ -223,6 +221,7 @@ const donateTransaction = asyncHandler(async (req, res) => {
       amount,
       type: type === "flexpass" ? "Flex" :
             type === "points" ? "Points" : "Donate",
+      transaction: "donate"
     });
 
     // Commit the transaction if both updates succeed

@@ -15,6 +15,8 @@ const { HeaderCell, Cell, Column } = Table;
 export const Account = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [page, setPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState();
+  const [sortType, setSortType] = useState();
   const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error: profileError } = useGetUserProfileQuery();
   const { data: ledger, isLoading: isLedgerLoading, isError: isLedgerError, error:LedgerError} = useGetUserLedgerTransactionsQuery(userInfo._id);
   const {data: balance, isLoading: isBalanceLoading, isError: isBalanceError, error:balanceError} = useGetBalanceQuery(userInfo._id);
@@ -83,61 +85,32 @@ export const Account = () => {
       padding: "10px",
     }
   };
+
+  const getSignedAmount = (transaction) => {
+    return transaction.transaction === "donate" ? -transaction.amount : transaction.amount;
+  };
   
-  const mockTransactions = [
-    { id: 1, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
-    { id: 2, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
-    { id: 3, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
-    { id: 4, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
-    { id: 5, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
-    { id: 6, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
-    { id: 7, date: "2025-03-01", amount: 2, type: "Flex Passes", status: "Completed" },
-    { id: 8, date: "2025-03-05", amount: 100, type: "Points", status: "Pending" },
-    { id: 9, date: "2025-03-10", amount: 3, type: "Flex Passes", status: "Completed" },
-  ];
- 
-  // const userRequest = requests?.filter((req) => req.userID === userInfo._id)
-  // .filter((req) => req.status === "fullfilled")
-
-  // console.log(userRequest)
-
-
-
-  // const [sortColumn, setSortColumn] = React.useState();
-  // const [sortType, setSortType] = React.useState();
-  // const [loading, setLoading] = React.useState(false);
-
-
-  // const getData = () => {
-  //   if (sortColumn && sortType) {
-  //     return [...mockTransactions].sort((a, b) => {
-  //       let x = a[sortColumn];
-  //       let y = b[sortColumn];
-  //       if (typeof x === 'string') {
-  //         x = x.charCodeAt();
-  //       }
-  //       if (typeof y === 'string') {
-  //         y = y.charCodeAt();
-  //       }
-  //       if (sortType === 'asc') {
-  //         return x - y;
-  //       } else {
-  //         return y - x;
-  //       }
-  //     });
-  //   }
-
-  //   return mockTransactions;
-  // };
-
-  // const handleSortColumn = (sortColumn, sortType) => {
-  //   setLoading(true);
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     setSortColumn(sortColumn);
-  //     setSortType(sortType);
-  //   }, 500);
-  // };
+  const getSortedData = () => {
+    if (sortColumn && sortType) {
+      return [...ledger].sort((a, b) => {
+        let x, y;
+  
+        if (sortColumn === "amount") {
+          x = getSignedAmount(a);
+          y = getSignedAmount(b);
+        } else if (sortColumn === "createdAt") {
+          x = new Date(a[sortColumn]).getTime();
+          y = new Date(b[sortColumn]).getTime();
+        } else {
+          x = a[sortColumn];
+          y = b[sortColumn];
+        }
+  
+        return sortType === "asc" ? (x > y ? 1 : -1) : (x < y ? 1 : -1);
+      });
+    }
+    return ledger;
+  };
 
 
   return (
@@ -168,71 +141,42 @@ export const Account = () => {
             <p>No profile data available</p>
           )}
         </Panel>
-        {/* Table with the same max width */}
-        <h3>Transactions</h3>
-        {/* <Table height={300} 
-            data= {mockTransactions}
-            // data = {getData()} 
-            bordered hover 
-            style={styles.table}
-            // sortColumn={sortColumn}
-            // onSortColumn={handleSortColumn}
-            // sortType={sortType}
-            >
-          <Column width={80} align="center">
-            <HeaderCell>Id</HeaderCell>
-            <Cell dataKey="id" />
-          </Column>
-          <Column width={150} sortable>
-            <HeaderCell>Date</HeaderCell >
-            <Cell dataKey="date" />
-          </Column>
-          <Column width={120} sortable>
-            <HeaderCell>Amount</HeaderCell>
-            <Cell dataKey="amount" />
-          </Column>
-          <Column width={180} sortable>
-            <HeaderCell>Type</HeaderCell>
-            <Cell dataKey="type" />
-          </Column>
-          <Column width={150} sortable>
-            <HeaderCell>Status</HeaderCell>
-            <Cell dataKey="status" />
-          </Column>
-          <Column width={100}>
-            <HeaderCell>Action</HeaderCell>
-            <Cell>
-              {(rowData) => (
-                <Button appearance="link" onClick={() => alert(`Transaction ID: ${rowData.id}`)}>
-                  View
-                </Button>
-              )}
-            </Cell>
-          </Column>
-        </Table > */}
-
         <Table 
           height={400} 
-          data={ledger} 
-          bordered hover 
+          data={getSortedData()} 
+          sortColumn={sortColumn}
+          sortType={sortType}
+          onSortColumn={(column, type) => {
+            setSortColumn(column);
+            setSortType(type);
+          }}
+          bordered 
+          hover 
           style = {styles.table}>
-          <Column width={200} align="center">
+          <Column width={150} align="center" sortable>
             <HeaderCell>Processed At</HeaderCell>
-            <Cell dataKey="createdAt" />
+            <Cell>
+            {rowData => new Date(rowData.createdAt).toLocaleString()}
+            </Cell>
           </Column>
-          <Column width={250} align="center">
+          <Column width={200} align="center" sortable>
             <HeaderCell>Recipient</HeaderCell>
             <Cell dataKey="recipient_name" />
           </Column>
-          <Column width={40} align="center">
+          <Column width={100} align="center" sortable sortColumn="amount">
             <HeaderCell>Amount</HeaderCell>
-            <Cell dataKey="amount" />
+            <Cell dataKey="amount">
+              {(rowData) => {
+                const isDonation = rowData.transaction === "donate";
+                const signedAmount = isDonation ? `- ${rowData.amount}` : `+ ${rowData.amount}`;
+                return <span style={{ color: isDonation ? "red" : "green" }}>{signedAmount}</span>;
+              }}
+            </Cell>
           </Column>
-          <Column width={250} align="center">
+          <Column width={250} align="center" sortable>
             <HeaderCell>Type</HeaderCell>
             <Cell dataKey="type" />
           </Column>
-
         </Table>
       </div>
     </main>
