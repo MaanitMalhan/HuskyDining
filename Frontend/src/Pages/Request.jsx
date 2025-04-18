@@ -109,7 +109,7 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
 
       setIsOpen(false);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error("An error occurred. Please try again later.");
       setIsOpen(false);
     }
   };
