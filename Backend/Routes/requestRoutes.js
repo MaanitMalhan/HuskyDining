@@ -18,5 +18,6 @@ router.get("/flex", getRequest).post("/", createRequest);
 router.get("/points", getRequestPoints);
 router.get("/:id", protect, getUserRequest);
 router.post("/filled", requestFlexTransaction);
+router.post("/filled-points", requestPointsTransaction);
 
 export default router;

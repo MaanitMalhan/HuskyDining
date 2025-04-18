@@ -7,6 +7,7 @@ import {
   useCreateRequestMutation,
 } from "../slices/requestApiSlice";
 import { Card } from "../components/Cards/Request";
+import { Card_Points } from "../components/Cards/Request_points";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiAlertCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -64,12 +65,16 @@ export const Request = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {pointRequests?.map((req) => (
-              <Card
+              <Card_Points
                 key={req._id}
                 title={req.priority || "Points"}
                 subtitle={`Could you donate ${req.amount} Point${
                   req.amount > 1 ? "s" : ""
                 }?`}
+                requestId={req._id}
+                fromUserId={userInfo?._id}
+                toUserId={req.userID}
+                pointsCount={req.amount}
               />
             ))}
           </div>

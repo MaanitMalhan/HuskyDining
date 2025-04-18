@@ -55,6 +55,13 @@ export const requestApiSlice = apiSlice.injectEndpoints({
         body: body,
       }),
     }),
+    fulfillRequestPoints: builder.mutation({
+      query: (body) => ({
+        url: `${REQUEST_URL}/filled-points`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
@@ -64,4 +71,5 @@ export const {
   useGetUserRequestsQuery,
   useCreateRequestMutation,
   useFulfillRequestMutation,
+  useFulfillRequestPointsMutation,
 } = requestApiSlice;

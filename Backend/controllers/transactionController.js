@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import RequestFlex from "../models/requestFlexModel.js";
+import RequestPoints from "../models/requestPointsModel.js";
 import Ledger from "../models/ledgerModel.js";
 import mongoose from "mongoose";
 
@@ -67,6 +68,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
     });
 
     // Commit the transaction if both updates succeed
+    await RequestFlex.deleteOne({ _id: requestId }).session(session);
     await session.commitTransaction();
     session.endSession();
 
@@ -86,7 +88,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
 // route GET /api/transaction/points
 // @access Private
 const requestPointsTransaction = asyncHandler(async (req, res) => {
-  const { fromUserId, toUserId, pointsCount } = req.body;
+  const { requestId, fromUserId, toUserId, pointsCount } = req.body;
 
   if (!fromUserId || !toUserId || !pointsCount) {
     res.status(400);
@@ -136,6 +138,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
     });
 
     // Commit the transaction if both updates succeed
+    await RequestPoints.deleteOne({ _id: requestId }).session(session);
     await session.commitTransaction();
     session.endSession();
 
@@ -155,7 +158,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
 // route GET /api/transaction/donate
 // @access Private
 const donateTransaction = asyncHandler(async (req, res) => {
-  const { fromUserId, toUserId, amount } = req.body;
+  const { requestId, fromUserId, toUserId, amount } = req.body;
 
   if (!fromUserId || !toUserId || !amount) {
     res.status(400);
@@ -205,6 +208,7 @@ const donateTransaction = asyncHandler(async (req, res) => {
     });
 
     // Commit the transaction if both updates succeed
+    await RequestPoints.deleteOne({ _id: requestId }).session(session);
     await session.commitTransaction();
     session.endSession();
 
