@@ -4,6 +4,8 @@ import transactionRoutes from "./transactionRoutes.js";
 import requestRoutes from "./requestRoutes.js";
 import reviewRoutes from "./reviewRoutes.js";
 import balanceRoutes from "./balanceRoutes.js";
+import diningRoutes from "./diningRoutes.js"; 
+import ledgerRoutes from "./ledgerRoutes.js"
 
 const router = express.Router();
 
@@ -12,5 +14,7 @@ router.use("/transaction", transactionRoutes); // Prefix /transaction for transa
 router.use("/request", requestRoutes); // Prefix /request for request routes
 router.use("/review", reviewRoutes); // Prefix /review for review routes
 router.use("/balance", balanceRoutes); // Prefix /balance for balance routes
+router.use("/dining", diningRoutes); // Prefix /dining for dining related routes
+router.use("/ledger", ledgerRoutes);
 
 export default router;

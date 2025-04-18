@@ -23,36 +23,54 @@ export const Request = () => {
       <Navbar />
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold px-6 py-4 rounded-xl hover:opacity-90 transition-all text-lg z-30 shadow-lg"
+        className="fixed bottom-6 right-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold px-6 py-4 rounded-xl hover:opacity-90 transition-all text-lg z-30 shadow-lg"
       >
         Click to Request
       </button>
-      <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} userID={userInfo._id} />
+      {userInfo && (
+        <SpringModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          userID={userInfo._id}
+        />
+      )}
       <div className="my-20"></div>
 
       <div className="p-8 space-y-12">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-700 mb-4">Flex Requests</h2>
+          <h2 className="text-2xl font-bold text-indigo-700 mb-4">
+            Flex Requests
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {requests?.map((req) => (
               <Card
-              key={req._id}
-              title={req.priority || "Flex"}
-              subtitle={`Could you donate ${req.amount} Flex Pass${req.amount > 1 ? "es" : ""}?`}
-            />
+                key={req._id}
+                title={req.priority || "Flex"}
+                subtitle={`Could you donate ${req.amount} Flex Pass${
+                  req.amount > 1 ? "es" : ""
+                }?`}
+                requestId={req._id}
+                fromUserId={userInfo?._id}
+                toUserId={req.userID}
+                flexPassCount={req.amount}
+              />
             ))}
           </div>
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-indigo-700 mb-4">Points Requests</h2>
+          <h2 className="text-2xl font-bold text-indigo-700 mb-4">
+            Points Requests
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {pointRequests?.map((req) => (
               <Card
-              key={req._id}
-              title={req.priority || "Points"}
-              subtitle={`Could you donate ${req.amount} Point${req.amount > 1 ? "s" : ""}?`}
-            />
+                key={req._id}
+                title={req.priority || "Points"}
+                subtitle={`Could you donate ${req.amount} Point${
+                  req.amount > 1 ? "s" : ""
+                }?`}
+              />
             ))}
           </div>
         </div>
@@ -87,9 +105,11 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
 
     try {
       const res = await create({ userID, diningHallID, amount, type }).unwrap();
+      toast.success("Request submitted successfully!");
+
       setIsOpen(false);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error("An error occurred. Please try again later.");
       setIsOpen(false);
     }
   };

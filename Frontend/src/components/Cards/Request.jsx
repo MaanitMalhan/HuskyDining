@@ -2,8 +2,34 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 import { MotionConfig, motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
+import { useFulfillRequestMutation } from "../../slices/requestApiSlice";
+import { toast } from "react-toastify";
 
-export const Card = ({ title, subtitle, className }) => {
+export const Card = ({
+  title,
+  subtitle,
+  className,
+  requestId,
+  fromUserId,
+  toUserId,
+  flexPassCount,
+}) => {
+  const [fufill, { isLoading }] = useFulfillRequestMutation();
+
+  const onClick = async (e) => {
+    try {
+      const res = await fufill({
+        requestId,
+        fromUserId,
+        toUserId,
+        flexPassCount,
+      }).unwrap();
+      toast.success("Fufilled");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
   return (
     <MotionConfig
       transition={{
@@ -23,7 +49,10 @@ export const Card = ({ title, subtitle, className }) => {
           variants={{
             hovered: { x: -5, y: -5 },
           }}
-          className={twMerge("-m-0.5 border-2 border-black bg-emerald-300", className)}
+          className={twMerge(
+            "-m-0.5 border-2 border-black bg-emerald-300",
+            className
+          )}
         >
           <motion.div
             initial={{ x: 0, y: 0 }}
@@ -43,7 +72,10 @@ export const Card = ({ title, subtitle, className }) => {
               <p className="transition-[margin] duration-300 ease-in-out group-hover:mb-10 text-2xl font-medium">
                 {subtitle}
               </p>
-              <button className="absolute bottom-2 left-2 right-2 translate-y-full border-2 border-black bg-white px-4 py-2 text-black opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+              <button
+                onClick={onClick}
+                className="absolute bottom-2 left-2 right-2 translate-y-full border-2 border-black bg-white px-4 py-2 text-black opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100"
+              >
                 DONATE
               </button>
             </div>

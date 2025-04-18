@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar/Navbar";
 import axios from "axios";
 
 export const Donate = () => {
   const [fromEmail, setFromEmail] = useState("");
+  
   const [toEmail, setToEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("flexpass");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo?.email) {
+      setFromEmail(userInfo.email);
+    }
+  }, []);
 
   const handleDonate = async (e) => {
     e.preventDefault();
@@ -31,17 +39,18 @@ export const Donate = () => {
   };
 
   return (
-     <main className="bg-projblack min-h-screen text-white flex flex-col items-center justify-center px-6">
+     <main className="bg-gray-10 min-h-screen text-gray-800 flex flex-col items-center justify-center px-6">
       {/*  <main
+        bg-projblack min-h-screen text-white flex flex-col items-center justify-center px-6
         className="bg-projblack min-h-screen text-white flex flex-col items-center justify-center px-6"
         style={{
           background: "linear-gradient(45deg, rgb(95, 20, 224), rgb(155, 105, 241))",
         }}
        > */}
       <Navbar />
-      <div className="max-w-lg w-full text-center">
+      <div className="max-w-lg w-full text-center bg-white p-8  rounded-lg shadow-md">
         <h1 className="text-4xl font-bold mb-6">Donate Flex Passes or Points</h1>
-        <p className="text-gray-400 mb-8">
+        <p className="text-gray-600 mb-8">
           Help a fellow student by donating your extra Flex Passes or Points! Enter the recipient's email and amount below.
         </p>
         <form onSubmit={handleDonate} className="space-y-4">
@@ -50,7 +59,7 @@ export const Donate = () => {
             placeholder="Your Email"
             value={fromEmail}
             onChange={(e) => setFromEmail(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+            className="w-full px-4 py-2 bg-gray-200 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
             required
           />
           <input
@@ -58,7 +67,7 @@ export const Donate = () => {
             placeholder="Recipient Email"
             value={toEmail}
             onChange={(e) => setToEmail(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+            className="w-full px-4 py-2 bg-gray-200 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
             required
           />
           <input
@@ -68,13 +77,13 @@ export const Donate = () => {
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+            className="w-full px-4 py-2 bg-gray-200 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
             required
           />
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+            className="w-full px-4 py-2 bg-gray-200 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
           >
             <option value="flexpass">Flex Pass</option>
             <option value="points">Points</option>

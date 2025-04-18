@@ -1,5 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import socket from "../socket";
+import { isFulfilled } from "@reduxjs/toolkit";
 
 const REQUEST_URL = "/api/request";
 
@@ -47,6 +48,13 @@ export const requestApiSlice = apiSlice.injectEndpoints({
         body: body,
       }),
     }),
+    fulfillRequest: builder.mutation({
+      query: (body) => ({
+        url: `${REQUEST_URL}/filled`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
@@ -55,4 +63,5 @@ export const {
   useGetRequestPointsQuery,
   useGetUserRequestsQuery,
   useCreateRequestMutation,
+  useFulfillRequestMutation,
 } = requestApiSlice;

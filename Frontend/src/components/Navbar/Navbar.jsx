@@ -74,7 +74,7 @@ const Header = () => {
             onClick={() => setMenuOpen((prev) => !prev)}
             className="hover:text-indigo-800 flex items-center gap-1"
           >
-            Menu
+            Pages
             <FiChevronDown
               className={`transition-transform duration-200 ${menuOpen ? "rotate-180" : ""}`}
             />
