@@ -67,7 +67,7 @@ export const Login = () => {
                 </h6>
                 <h2 className="text-3xl font-semibold">Welcome Back</h2>
                 <h6 className="text-xs font-normal inline">
-                  Not registred yet?
+                  Not registered yet?
                 </h6>
                 <Link
                   to={"/register"}
