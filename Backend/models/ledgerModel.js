@@ -7,20 +7,24 @@ const ledgerSchema = mongoose.Schema(
       required: true,
     },
     recipientID: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
     recipient_name: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     amount: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     type: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
+    },
+    transaction: {
+      type: String,
+      required: true,
     }
   },
   {

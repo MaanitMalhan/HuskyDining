@@ -64,6 +64,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
       recipient_name: recipientUser.name,
       amount: flexPassCount,
       type: "Flex",
+      transaction: "request"
     });
 
     // Commit the transaction if both updates succeed
@@ -133,6 +134,7 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
       recipient_name: recipientUser.name,
       amount: pointsCount,
       type: "Points",
+      transaction: "request"
     });
 
     // Commit the transaction if both updates succeed
@@ -155,23 +157,39 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
 // route GET /api/transaction/donate
 // @access Private
 const donateTransaction = asyncHandler(async (req, res) => {
-  const { fromUserId, toUserId, amount } = req.body;
+  const { fromEmail, toEmail, amount, type } = req.body;
 
-  if (!fromUserId || !toUserId || !amount) {
+
+  if (!fromEmail || !toEmail || !amount || !type) {
     res.status(400);
     throw new Error(
-      "Please provide all required fields: fromUserId, toUserId, amount"
+      "Please provide all required fields"
     );
   }
+
+  const fromUser = await User.findOne({ email: fromEmail });
+  const toUser = await User.findOne({ email: toEmail });
+
+  if (!fromUser || !toUser) {
+    res.status(404);
+    throw new Error("One or both users not found");
+  }
+
+  const fromUserId = fromUser._id;
+  const toUserId = toUser._id;
+
 
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
 
+    const balanceField =  type === "flexpass" ? "flexpass" :
+                          type === "points" ? "points" : "balance";
+
     // Subtract donation amount from sender
     const sender = await User.findByIdAndUpdate(
       fromUserId,
-      { $inc: { balance: -amount } },
+      { $inc: { [balanceField]: -amount } },
       { new: true, session }
     );
 
@@ -186,7 +204,7 @@ const donateTransaction = asyncHandler(async (req, res) => {
     // Add donation amount to recipient
     const recipient = await User.findByIdAndUpdate(
       toUserId,
-      { $inc: { balance: amount } },
+      { $inc: { [balanceField]: amount } },
       { new: true, session }
     );
 
@@ -199,9 +217,11 @@ const donateTransaction = asyncHandler(async (req, res) => {
     await Ledger.create({
       userID: fromUserId,
       recipientID: toUserId,
-      recipient_name: recipientUser.name,
-      amount: amount,
-      type: "Donate",
+      recipient_name: recipient.name,
+      amount,
+      type: type === "flexpass" ? "Flex" :
+            type === "points" ? "Points" : "Donate",
+      transaction: "donate"
     });
 
     // Commit the transaction if both updates succeed

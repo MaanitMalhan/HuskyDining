@@ -81,7 +81,7 @@ export const Request = () => {
 
 const SpringModal = ({ isOpen, setIsOpen, userID }) => {
   const [amount, setAmount] = useState("");
-  const [diningHallID, setDiningHall] = useState("");
+  const [diningHallID, setDiningHall] = useState("67c739b5dbbbc523ecba74ee");
   const [type, setType] = useState("flex");
   const [create, { isLoading }] = useCreateRequestMutation();
 
@@ -98,7 +98,7 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!amount || !diningHallID) {
+    if (!amount) {
       alert("Please fill out all fields");
       return;
     }
@@ -173,19 +173,6 @@ const SpringModal = ({ isOpen, setIsOpen, userID }) => {
                   className="w-full p-2 rounded text-black"
                   required
                 />
-                <select
-                  value={diningHallID}
-                  onChange={(e) => setDiningHall(e.target.value)}
-                  className="w-full p-2 rounded text-black"
-                  required
-                >
-                  <option value="">Select Dining Hall</option>
-                  {diningHalls.map((hall) => (
-                    <option key={hall.id} value={hall.id}>
-                      {hall.name}
-                    </option>
-                  ))}
-                </select>
               </form>
               <div className="flex gap-2">
                 <button
