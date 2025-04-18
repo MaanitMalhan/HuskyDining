@@ -141,6 +141,7 @@ export const Account = () => {
             <p>No profile data available</p>
           )}
         </Panel>
+        <h3>Transactions</h3>
         <Table 
           height={400} 
           data={getSortedData()} 
