@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react"; // Added useMemo
 import { useGetUserProfileQuery, useGetBalanceQuery } from "../slices/authApiSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { Panel, PanelGroup, Table, Button, Placeholder } from "rsuite";
 import { getDate } from "rsuite/esm/internals/utils/date";
 import { useGetUserLedgerTransactionsQuery} from "../slices/ledgerSlice";
 import { ConsoleLogEntry } from "selenium-webdriver/bidi/logEntries";
+import { format } from 'date-fns'; // Added date-fns import
 
 const { HeaderCell, Cell, Column } = Table;
 
@@ -21,15 +22,61 @@ export const Account = () => {
   const { data: ledger, isLoading: isLedgerLoading, isError: isLedgerError, error:LedgerError} = useGetUserLedgerTransactionsQuery(userInfo._id);
   const {data: balance, isLoading: isBalanceLoading, isError: isBalanceError, error:balanceError} = useGetBalanceQuery(userInfo._id);
   // const { data: requests,isLoading: isRequestLoading, isError: isRequestError, error:RequestError } = useGetRequestsQuery(page);
-  
+
+  // --- START: Added pre-processing logic ---
+  const processedLedger = useMemo(() => {
+    if (!ledger || ledger.length === 0) {
+      return [];
+    }
+
+    return ledger.map(transaction => {
+      let formattedDate = 'N/A'; // Default value
+
+      try {
+        const dateString = transaction.createdAt; // Get the date string
+
+        // Check if dateString is a non-empty string
+        if (dateString && typeof dateString === 'string') {
+          // Attempt to create a Date object directly from the string
+          const dateObject = new Date(dateString);
+
+          // Check if the created Date object is valid
+          if (!isNaN(dateObject.getTime())) {
+            // Format the valid Date object using date-fns
+            // Adjust 'MM/dd/yyyy h:mm a' format as desired
+            formattedDate = format(dateObject, 'MM/dd/yyyy h:mm a');
+          } else {
+            // Handle cases where the string might be invalid format
+            console.warn(`Could not parse date string: ${dateString}`);
+            formattedDate = 'Invalid Date Format';
+          }
+        } else {
+            // Handle cases where createdAt might be missing or not a string
+             console.warn(`createdAt field is missing or not a string for transaction: ${transaction._id}`);
+        }
+      } catch (error) {
+        console.error(`Error processing date for transaction ${transaction._id}:`, error);
+        formattedDate = 'Formatting Error';
+      }
+
+      // Return new object with formatted date
+      return {
+        ...transaction,
+        formattedCreatedAt: formattedDate
+      };
+    });
+  }, [ledger]); // Dependency array remains the same
+  // --- END: Corrected pre-processing logic ---
+
+
   if (isProfileLoading || isBalanceLoading || isLedgerLoading ) {
     return <div>Loading...</div>;
   }
-  
+
   if (isProfileError ) {
     return <div>Error fetching profile: {profileError?.message || "Unknown error"}</div>;
   }
-  
+
   if (isBalanceError) {
     return <div>Error fetching balance: {balanceError?.message || "Unknown error"}</div>;
   }
@@ -38,9 +85,6 @@ export const Account = () => {
     return <div>Error fetching ledger: {balanceError?.message || "Unknown error"}</div>;
   }
 
-  console.log(userInfo._id);
-
-  console.log(ledger);
 
 
   const styles = {
@@ -123,7 +167,7 @@ export const Account = () => {
       {/* Centered container with max width for consistency */}
       <div style={{ maxWidth: "800px", margin: "auto" }}>
       <h3>Account Information</h3>
-        <Panel bordered style={styles.panel}> 
+        <Panel bordered style={styles.panel}>
           <p>{`Hello, ${userInfo.name}`}</p>
           {balance ? (
             <pre
@@ -156,9 +200,9 @@ export const Account = () => {
           style = {styles.table}>
           <Column width={150} align="center" sortable>
             <HeaderCell>Processed At</HeaderCell>
-            <Cell>
-            {rowData => new Date(rowData.createdAt).toLocaleString()}
-            </Cell>
+            {/* --- START: Updated Cell dataKey --- */}
+            <Cell dataKey="formattedCreatedAt"/>
+            {/* --- END: Updated Cell dataKey --- */}
           </Column>
           <Column width={200} align="center" sortable>
             <HeaderCell>Recipient</HeaderCell>

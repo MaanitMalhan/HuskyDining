@@ -172,7 +172,7 @@ export const HomeLoggedIn = () => {
           
           <div className="mt-6">
             <a 
-              href="https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=07&locationName=North+Campus+Dining+Hall&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate=04%2f01%2f2025&mealName=Breakfast"
+              href="/menu"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors inline-flex items-center"
@@ -219,9 +219,13 @@ export const HomeLoggedIn = () => {
       <section className="mt-16 text-center py-6">
         <h2 className="text-3xl font-bold text-gray-800">Need Assistance?</h2>
         <p className="mt-4 text-lg text-gray-700">Reach out to our support team for any questions or concerns.</p>
-        <button className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-sm">
+        <button
+          onClick={() => window.location.href = "mailto:huskydining@gmail.com"}
+          className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-sm"
+        >
           Contact Support
         </button>
+
       </section>
     </main>
   );

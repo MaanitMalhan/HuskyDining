@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useDonateMutation } from "../slices/donateSlice";
 
 export const Donate = () => {
   const [fromEmail, setFromEmail] = useState("");
+  
   const [toEmail, setToEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("flexpass");
@@ -30,6 +31,13 @@ export const Donate = () => {
   //     setLoading(false);
   //   }
   // };
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo?.email) {
+      setFromEmail(userInfo.email);
+    }
+  }, []);
 
   const handleDonate = async (e) => {
     e.preventDefault();
