@@ -6,7 +6,7 @@ export const donateApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         donate: builder.mutation({
             query: (body) => ({
-            url: `${REQUEST_URL}/donate`,
+            url: `${REQUEST_URL}/directDonate`,
             method: "POST",
             body: body,
             }),

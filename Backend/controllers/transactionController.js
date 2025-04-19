@@ -91,7 +91,7 @@ const requestFlexTransaction = asyncHandler(async (req, res) => {
 const requestPointsTransaction = asyncHandler(async (req, res) => {
   const { requestId, fromUserId, toUserId, pointsCount } = req.body;
 
-  if (!fromUserId || !toUserId || !pointsCount) {
+  if (!requestId || !fromUserId || !toUserId || !pointsCount) {
     res.status(400);
     throw new Error(
       "Please provide all required fields: fromUserId, toUserId, flexpassCount"
@@ -156,11 +156,12 @@ const requestPointsTransaction = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc User Donate Transaction
 // route GET /api/transaction/donate
 // @access Private
-const donateTransaction = asyncHandler(async (req, res) => {
-  const { requestId, fromUserId, toUserId, amount } = req.body;
+const directDonateTransaction = asyncHandler(async (req, res) => {
+  const { fromEmail, toEmail, type, amount } = req.body;
 
   if (!fromEmail || !toEmail || !amount || !type) {
     res.status(400);
@@ -170,10 +171,14 @@ const donateTransaction = asyncHandler(async (req, res) => {
   const fromUser = await User.findOne({ email: fromEmail });
   const toUser = await User.findOne({ email: toEmail });
 
+
   if (!fromUser || !toUser) {
     res.status(404);
     throw new Error("One or both users not found");
   }
+
+  const fromuserID = fromUser._id;
+  const toUserID = toUser._id;
 
   const session = await mongoose.startSession();
   try {
@@ -188,22 +193,23 @@ const donateTransaction = asyncHandler(async (req, res) => {
 
     // Subtract donation amount from sender
     const sender = await User.findByIdAndUpdate(
-      fromUserId,
+      fromuserID,
       { $inc: { [balanceField]: -amount } },
       { new: true, session }
     );
+
 
     if (!sender) {
       throw new Error("Sender not found");
     }
 
-    if (sender.balance < 0) {
+    if (sender[balanceField] < 0) {
       throw new Error("Sender has insufficient balance");
     }
 
     // Add donation amount to recipient
     const recipient = await User.findByIdAndUpdate(
-      toUserId,
+      toUserID,
       { $inc: { [balanceField]: amount } },
       { new: true, session }
     );
@@ -212,22 +218,22 @@ const donateTransaction = asyncHandler(async (req, res) => {
       throw new Error("Recipient not found");
     }
 
-    const recipientUser = await User.findById(toUserId);
+    // const recipientUser = await User.findById(toUser);
+
+
+    // Commit the transaction if both updates succeed
+    await session.commitTransaction();
+    session.endSession();
 
     await Ledger.create({
-      userID: fromUserId,
-      recipientID: toUserId,
-      recipient_name: recipient.name,
+      userID: fromuserID,
+      recipientID: toUserID,
+      recipient_name: toUser.name,
       amount,
       type:
         type === "flexpass" ? "Flex" : type === "points" ? "Points" : "Donate",
       transaction: "donate",
     });
-
-    // Commit the transaction if both updates succeed
-    await RequestPoints.deleteOne({ _id: requestId }).session(session);
-    await session.commitTransaction();
-    session.endSession();
 
     res.status(200).json({
       message: "Donation successful",
@@ -241,4 +247,4 @@ const donateTransaction = asyncHandler(async (req, res) => {
   }
 });
 
-export { requestFlexTransaction, requestPointsTransaction, donateTransaction };
+export { requestFlexTransaction, requestPointsTransaction, directDonateTransaction };

@@ -19,6 +19,7 @@ export const Card_Points = ({
   const onClick = async (e) => {
     try {
       const res = await fufill({
+        requestId,
         fromUserId,
         toUserId,
         pointsCount,

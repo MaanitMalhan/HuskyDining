@@ -8,8 +8,7 @@ import {
 import { protect } from "../middleware/authMiddleware.js";
 import {
   requestFlexTransaction,
-  requestPointsTransaction,
-  donateTransaction,
+  requestPointsTransaction
 } from "../controllers/transactionController.js";
 
 const router = express.Router();
