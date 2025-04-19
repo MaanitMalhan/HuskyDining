@@ -64,10 +64,10 @@ export const Card_Points = ({
               className
             )}
           >
-            <p className="flex items-center text-2xl font-medium uppercase">
+            {/* <p className="flex items-center text-2xl font-medium uppercase">
               <FiArrowRight className="-ml-8 mr-2 opacity-0 transition-all duration-300 ease-in-out group-hover:ml-0 group-hover:opacity-100" />
               {title} Priority
-            </p>
+            </p> */}
             <div>
               <p className="transition-[margin] duration-300 ease-in-out group-hover:mb-10 text-2xl font-medium">
                 {subtitle}
